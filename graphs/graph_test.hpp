@@ -18,9 +18,9 @@ class GraphTest {
         // addRemoveEditEdgesTest(testFileName);
         // std::cout << "Passed!\n";
 
-        // std::cout << "Transform graph representations test: ";
+        std::cout << "Transform graph representations test: ";
         transformTest(testFileName);
-        // std::cout << "Passed!\n";
+        std::cout << "Passed!\n";
 
         std::cout << "All tests passed. You are excellent!\n";
     }
