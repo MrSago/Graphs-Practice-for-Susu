@@ -59,6 +59,7 @@ void AdjacencyList::writeGraph(std::ofstream& file) {
             for (const auto& edge : list[i]) {
                 file << edge.first + 1 << ' ' << edge.second << ' ';
             }
+            file.seekp(-1, std::ofstream::cur);
             file << '\n';
         }
     } else {
@@ -66,6 +67,7 @@ void AdjacencyList::writeGraph(std::ofstream& file) {
             for (const auto& edge : list[i]) {
                 file << edge.first + 1 << ' ';
             }
+            file.seekp(-1, std::ofstream::cur);
             file << '\n';
         }
     }

@@ -33,6 +33,7 @@ void AdjacencyMatrix::writeGraph(std::ofstream& file) {
         for (const auto& vertice : row) {
             file << vertice << ' ';
         }
+        file.seekp(-1, std::ofstream::cur);
         file << '\n';
     }
 }

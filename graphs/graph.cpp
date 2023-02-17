@@ -142,9 +142,11 @@ void Graph::allocNewGraph() {
         case GraphType::AdjacencyMatrix:
             graphRepr = new AdjacencyMatrix();
             return;
+
         case GraphType::EdgeList:
             graphRepr = new EdgeList();
             return;
+
         case GraphType::Unknown:
         default:
             return;

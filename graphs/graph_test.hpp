@@ -1,6 +1,7 @@
 
 #include <cassert>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 
 #include "graph.hpp"
@@ -8,21 +9,22 @@
 class GraphTest {
    public:
     void runUnitTests(const std::string& testFileName) {
-        std::cout << "Graph Unit Tests started...\n";
+        std::cout << "\nGraph Unit Tests started...\n";
+        std::cout << "Input test file: " << testFileName << '\n';
 
-        std::cout << "Read-write test: ";
+        std::cout << "\tRead-write test...";
         readWriteTest(testFileName);
-        std::cout << "Passed!\n";
+        std::cout << std::setw(20) << "Passed!\n";
 
-        // std::cout << "Add, remove and edit edges from graph test: ";
+        // std::cout << "Add, remove and edit edges from graph test... ";
         // addRemoveEditEdgesTest(testFileName);
-        // std::cout << "Passed!\n";
+        // std::cout << std::setw(10) << "Passed!\n";
 
-        std::cout << "Transform graph representations test: ";
+        std::cout << "\tTransform graph test... ";
         transformTest(testFileName);
-        std::cout << "Passed!\n";
+        std::cout << std::setw(14) << "Passed!\n";
 
-        std::cout << "All tests passed. You are excellent!\n";
+        std::cout << "All tests passed. You are excellent!\n\n";
     }
 
    private:
