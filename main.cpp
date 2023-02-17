@@ -1,10 +1,9 @@
 
 #include "graph.hpp"
+#include "graph_test.hpp"
 
 int main() {
-    Graph graph;
-    graph.readGraph("test2.txt");
-    graph.printGraph();
-    graph.writeGraph("output2.txt");
+    GraphTest test;
+    test.runUnitTests("input_1e3_1e5.txt");
     return 0;
 }

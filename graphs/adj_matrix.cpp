@@ -1,16 +1,24 @@
 
 #include "adj_matrix.hpp"
 
+#include <fstream>
+#include <iostream>
+#include <vector>
+
+AdjacencyMatrix::AdjacencyMatrix(const std::vector<std::vector<int>>&& matrix,
+                                 const bool isDirected, const bool isWeighted)
+    : matrix(matrix), isDirected(isDirected), isWeighted(isWeighted) {}
+
 void AdjacencyMatrix::readGraph(std::ifstream& file) {
     clearGraph();
 
     int verticesCount;
     file >> verticesCount;
-    adjacencyMatrix.resize(verticesCount, std::vector<int>(verticesCount));
+    matrix.resize(verticesCount, std::vector<int>(verticesCount, 0));
 
     file >> isDirected >> isWeighted;
 
-    for (auto& row : adjacencyMatrix) {
+    for (auto& row : matrix) {
         for (auto& vertice : row) {
             file >> vertice;
         }
@@ -18,10 +26,10 @@ void AdjacencyMatrix::readGraph(std::ifstream& file) {
 }
 
 void AdjacencyMatrix::writeGraph(std::ofstream& file) {
-    file << adjacencyMatrix.size() << '\n';
+    file << matrix.size() << '\n';
     file << isDirected << ' ' << isWeighted << '\n';
 
-    for (const auto& row : adjacencyMatrix) {
+    for (const auto& row : matrix) {
         for (const auto& vertice : row) {
             file << vertice << ' ';
         }
@@ -30,76 +38,93 @@ void AdjacencyMatrix::writeGraph(std::ofstream& file) {
 }
 
 void AdjacencyMatrix::addEdge(const int from, const int to, const int weight) {
-    if (!isVerticeExist(from) || !isVerticeExist(to)) {
-        std::cerr << "Vertice doesn't exist\n";
-        return;
-    }
-
     if (isEdgeExist(from, to)) {
-        std::cerr << "Edge already exist\n";
         return;
     }
 
-    adjacencyMatrix[from][to] = weight;
+    int from_idx = from - 1;
+    int to_idx = to - 1;
+
+    matrix[from_idx][to_idx] = weight;
     if (!isDirected) {
-        adjacencyMatrix[to][from] = weight;
+        matrix[to_idx][from_idx] = weight;
     }
 }
 
 void AdjacencyMatrix::removeEdge(const int from, const int to) {
-    if (!isVerticeExist(from) || !isVerticeExist(to)) {
-        std::cerr << "Vertice doesn't exist\n";
-        return;
-    }
-
     if (!isEdgeExist(from, to)) {
-        std::cerr << "Edge doesn't exist\n";
         return;
     }
 
-    adjacencyMatrix[from][to] = 0;
+    int from_idx = from - 1;
+    int to_idx = to - 1;
+
+    matrix[from_idx][to_idx] = 0;
     if (!isDirected) {
-        adjacencyMatrix[to][from] = 0;
+        matrix[to_idx][from_idx] = 0;
     }
 }
 
 void AdjacencyMatrix::changeEdge(const int from, const int to,
                                  const int weight) {
-    if (!isVerticeExist(from) || !isVerticeExist(to)) {
-        std::cerr << "Vertice doesn't exist\n";
-        return;
-    }
-
     if (!isEdgeExist(from, to)) {
-        std::cerr << "Edge doesn't exist\n";
         return;
     }
 
-    adjacencyMatrix[from][to] = weight;
+    int from_idx = from - 1;
+    int to_idx = to - 1;
+
+    matrix[from_idx][to_idx] = weight;
     if (!isDirected) {
-        adjacencyMatrix[to][from] = weight;
+        matrix[to_idx][from_idx] = weight;
     }
 }
 
 void AdjacencyMatrix::printGraph() const {
     std::cout << "Adjacency matrix:\n";
-    for (const auto& row : adjacencyMatrix) {
+    for (const auto& row : matrix) {
         for (const auto& vertice : row) {
-            std::cout << std::setw(3) << vertice << ' ';
+            std::cout << vertice << ' ';
         }
         std::cout << '\n';
     }
 }
 
 void AdjacencyMatrix::clearGraph() {
-    adjacencyMatrix.clear();
+    matrix.clear();
     isDirected = isWeighted = false;
 }
 
+AdjacencyList* AdjacencyMatrix::getAdjList() {
+    std::vector<std::vector<std::pair<int, int>>> list(matrix.size());
+    for (int i = 0; i < matrix.size(); ++i) {
+        for (int j = 0; j < matrix.size(); ++j) {
+            if (matrix[i][j]) {
+                list[i].push_back({j, matrix[i][j]});
+            }
+        }
+    }
+    return new AdjacencyList(std::move(list), isDirected, isWeighted);
+}
+
+EdgeList* AdjacencyMatrix::getListOfEdges() {
+    std::map<std::pair<int, int>, int> edges;
+    for (int i = 0; i < matrix.size(); ++i) {
+        for (int j = 0; j < matrix.size(); ++j) {
+            if (matrix[i][j]) {
+                edges[{i, j}] = matrix[i][j];
+            }
+        }
+    }
+    return new EdgeList(std::move(edges), isDirected, isWeighted,
+                        matrix.size());
+}
+
 bool AdjacencyMatrix::isVerticeExist(const int vertice) const {
-    return vertice >= 0 && vertice < adjacencyMatrix.size();
+    return vertice > 0 && vertice <= matrix.size();
 }
 
 bool AdjacencyMatrix::isEdgeExist(const int from, const int to) const {
-    return adjacencyMatrix[from][to] != 0;
+    return isVerticeExist(from) && isVerticeExist(to) &&
+           matrix[from - 1][to - 1];
 }

@@ -1,24 +1,23 @@
 
-#ifndef ADJ_LIST_HPP
-#define ADJ_LIST_HPP
+#ifndef EDGE_LIST_HPP
+#define EDGE_LIST_HPP
 
 #include <fstream>
-#include <set>
-#include <tuple>
-#include <vector>
+#include <map>
 
+#include "adj_list.hpp"
 #include "adj_matrix.hpp"
-#include "edge_list.hpp"
 #include "graph_representation.hpp"
 
 class AdjacencyMatrix;
-class EdgeList;
+class AdjacencyList;
 
-class AdjacencyList : public GraphRepresentation {
+class EdgeList : public GraphRepresentation {
    public:
-    AdjacencyList() = default;
-    AdjacencyList(const std::vector<std::vector<std::pair<int, int>>>&& list,
-                  const bool isDirected, const bool isWeighted);
+    EdgeList() = default;
+    EdgeList(const std::map<std::pair<int, int>, int>&& edges,
+             const bool isDirected, const bool isWeighted,
+             const int verticesCount);
 
     void readGraph(std::ifstream& file) override;
     void writeGraph(std::ofstream& file) override;
@@ -30,11 +29,12 @@ class AdjacencyList : public GraphRepresentation {
     void clearGraph() override;
 
     AdjacencyMatrix* getAdjMatrix();
-    EdgeList* getListOfEdges();
+    AdjacencyList* getAdjList();
 
    private:
-    // vector[from][i] = {to, weight};
-    std::vector<std::vector<std::pair<int, int>>> list;
+    // map: key - pair of vertices, value - weight
+    std::map<std::pair<int, int>, int> edges;
+    int verticesCount = 0;
     bool isDirected = false;
     bool isWeighted = false;
 
@@ -42,4 +42,4 @@ class AdjacencyList : public GraphRepresentation {
     bool isEdgeExist(const int from, const int to) const;
 };
 
-#endif  // ADJ_LIST_HPP
+#endif  // EDGE_LIST_HPP

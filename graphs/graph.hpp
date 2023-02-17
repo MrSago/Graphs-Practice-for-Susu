@@ -2,21 +2,9 @@
 #ifndef GRAPH_HPP
 #define GRAPH_HPP
 
-#include <algorithm>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <iterator>
-#include <limits>
-#include <map>
-#include <set>
-#include <sstream>
-#include <string>
-#include <vector>
-
 #include "adj_list.hpp"
 #include "adj_matrix.hpp"
-//#include "edje_list.hpp"
+#include "edge_list.hpp"
 #include "graph_representation.hpp"
 
 enum class GraphType : char {
@@ -28,7 +16,7 @@ enum class GraphType : char {
 
 class Graph {
    public:
-    Graph();
+    Graph() = default;
     ~Graph();
 
     void readGraph(const std::string& fileName);
@@ -36,16 +24,19 @@ class Graph {
     void addEdge(const int from, const int to, const int weight);
     void removeEdge(const int from, const int to);
     void changeEdge(const int from, const int to, const int weight);
+
     void printGraph();
     void clearGraph();
 
-    // void transformToAdjMatrix();
-    // void transformToAdjList();
-    // void transformToListOfEdges();
+    void transformToAdjMatrix();
+    void transformToAdjList();
+    void transformToListOfEdges();
 
    private:
     GraphType graphType = GraphType::Unknown;
-    std::map<GraphType, GraphRepresentation*> graphRepr;
+    GraphRepresentation* graphRepr;
+
+    void allocNewGraph();
 };
 
 #endif  // GRAPH_HPP
