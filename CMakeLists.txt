@@ -13,4 +13,6 @@ file(GLOB_RECURSE SRC_GRAPHS ${CMAKE_CURRENT_SOURCE_DIR}/graphs/*.cpp)
 
 add_executable(${TARGET} ${MAIN_FILE} ${SRC_GRAPHS})
 
-target_include_directories(${TARGET} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/graphs)
+target_include_directories(${TARGET} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphs
+    ${CMAKE_CURRENT_SOURCE_DIR}/graphs/algo)

@@ -6,6 +6,7 @@
 #include "adj_matrix.hpp"
 #include "edge_list.hpp"
 #include "graph_representation.hpp"
+#include "kruscal.hpp"
 
 enum class GraphType : char {
     AdjacencyMatrix = 'C',
@@ -35,6 +36,8 @@ class Graph {
    private:
     GraphType graphType = GraphType::Unknown;
     GraphRepresentation* graphRepr;
+
+    Kruscal kruscal;
 
     void allocNewGraph();
 };
