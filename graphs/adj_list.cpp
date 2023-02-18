@@ -150,7 +150,7 @@ void AdjacencyList::clearGraph() {
     isWeighted = false;
 }
 
-AdjacencyMatrix* AdjacencyList::getAdjMatrix() {
+AdjacencyMatrix* AdjacencyList::getNewAdjMatrix() {
     std::vector<std::vector<int>> matrix(list.size(),
                                          std::vector<int>(list.size(), 0));
     for (int i = 0; i < list.size(); ++i) {
@@ -161,7 +161,7 @@ AdjacencyMatrix* AdjacencyList::getAdjMatrix() {
     return new AdjacencyMatrix(std::move(matrix), isDirected, isWeighted);
 }
 
-EdgeList* AdjacencyList::getListOfEdges() {
+EdgeList* AdjacencyList::getNewListOfEdges() {
     std::map<std::pair<int, int>, int> edges;
     for (int i = 0; i < list.size(); ++i) {
         for (const auto& edge : list[i]) {
@@ -169,6 +169,10 @@ EdgeList* AdjacencyList::getListOfEdges() {
         }
     }
     return new EdgeList(std::move(edges), isDirected, isWeighted, list.size());
+}
+
+std::vector<std::vector<std::pair<int, int>>>& AdjacencyList::getList() {
+    return list;
 }
 
 bool AdjacencyList::isVerticeExist(const int vertice) const {

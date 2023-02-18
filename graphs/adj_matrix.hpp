@@ -27,8 +27,10 @@ class AdjacencyMatrix : public GraphRepresentation {
     void printGraph() const override;
     void clearGraph() override;
 
-    AdjacencyList* getAdjList();
-    EdgeList* getListOfEdges();
+    AdjacencyList* getNewAdjList();
+    EdgeList* getNewListOfEdges();
+
+    std::vector<std::vector<int>>& getMatrix();
 
    private:
     std::vector<std::vector<int>> matrix;

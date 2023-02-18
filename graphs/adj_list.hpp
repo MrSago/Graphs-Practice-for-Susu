@@ -29,8 +29,10 @@ class AdjacencyList : public GraphRepresentation {
     void printGraph() const override;
     void clearGraph() override;
 
-    AdjacencyMatrix* getAdjMatrix();
-    EdgeList* getListOfEdges();
+    AdjacencyMatrix* getNewAdjMatrix();
+    EdgeList* getNewListOfEdges();
+
+    std::vector<std::vector<std::pair<int, int>>>& getList();
 
    private:
     // vector[from][i] = {to, weight};

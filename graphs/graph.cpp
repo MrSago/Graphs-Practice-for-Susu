@@ -62,14 +62,14 @@ void Graph::transformToAdjMatrix() {
     switch (graphType) {
         case GraphType::AdjacencyList:
             newGraphRepr =
-                static_cast<AdjacencyList*>(graphRepr)->getAdjMatrix();
+                static_cast<AdjacencyList*>(graphRepr)->getNewAdjMatrix();
             clearGraph();
             graphRepr = newGraphRepr;
             graphType = GraphType::AdjacencyMatrix;
             break;
 
         case GraphType::EdgeList:
-            newGraphRepr = static_cast<EdgeList*>(graphRepr)->getAdjMatrix();
+            newGraphRepr = static_cast<EdgeList*>(graphRepr)->getNewAdjMatrix();
             clearGraph();
             graphRepr = newGraphRepr;
             graphType = GraphType::AdjacencyMatrix;
@@ -87,14 +87,14 @@ void Graph::transformToAdjList() {
     switch (graphType) {
         case GraphType::AdjacencyMatrix:
             newGraphRepr =
-                static_cast<AdjacencyMatrix*>(graphRepr)->getAdjList();
+                static_cast<AdjacencyMatrix*>(graphRepr)->getNewAdjList();
             clearGraph();
             graphRepr = newGraphRepr;
             graphType = GraphType::AdjacencyList;
             break;
 
         case GraphType::EdgeList:
-            newGraphRepr = static_cast<EdgeList*>(graphRepr)->getAdjList();
+            newGraphRepr = static_cast<EdgeList*>(graphRepr)->getNewAdjList();
             clearGraph();
             graphRepr = newGraphRepr;
             graphType = GraphType::AdjacencyList;
@@ -112,7 +112,7 @@ void Graph::transformToListOfEdges() {
     switch (graphType) {
         case GraphType::AdjacencyList:
             newGraphRepr =
-                static_cast<AdjacencyList*>(graphRepr)->getListOfEdges();
+                static_cast<AdjacencyList*>(graphRepr)->getNewListOfEdges();
             clearGraph();
             graphRepr = newGraphRepr;
             graphType = GraphType::EdgeList;
@@ -120,7 +120,7 @@ void Graph::transformToListOfEdges() {
 
         case GraphType::AdjacencyMatrix:
             newGraphRepr =
-                static_cast<AdjacencyMatrix*>(graphRepr)->getListOfEdges();
+                static_cast<AdjacencyMatrix*>(graphRepr)->getNewListOfEdges();
             clearGraph();
             graphRepr = newGraphRepr;
             graphType = GraphType::EdgeList;

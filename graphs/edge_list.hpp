@@ -28,8 +28,10 @@ class EdgeList : public GraphRepresentation {
     void printGraph() const override;
     void clearGraph() override;
 
-    AdjacencyMatrix* getAdjMatrix();
-    AdjacencyList* getAdjList();
+    AdjacencyMatrix* getNewAdjMatrix();
+    AdjacencyList* getNewAdjList();
+
+    std::map<std::pair<int, int>, int>& getEdges();
 
    private:
     // map: key - pair of vertices, value - weight
