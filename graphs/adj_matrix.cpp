@@ -21,7 +21,14 @@ void AdjacencyMatrix::readGraph(std::ifstream& file) {
     for (auto& row : matrix) {
         for (auto& vertice : row) {
             file >> vertice;
+            if (vertice) {
+                ++edgesCount;
+            }
         }
+    }
+
+    if (!isDirected) {
+        edgesCount /= 2;
     }
 }
 
@@ -50,6 +57,7 @@ void AdjacencyMatrix::addEdge(const int from, const int to, const int weight) {
     if (!isDirected) {
         matrix[to_idx][from_idx] = weight;
     }
+    ++edgesCount;
 }
 
 void AdjacencyMatrix::removeEdge(const int from, const int to) {
@@ -64,6 +72,7 @@ void AdjacencyMatrix::removeEdge(const int from, const int to) {
     if (!isDirected) {
         matrix[to_idx][from_idx] = 0;
     }
+    --edgesCount;
 }
 
 void AdjacencyMatrix::changeEdge(const int from, const int to,
@@ -94,7 +103,12 @@ void AdjacencyMatrix::printGraph() const {
 void AdjacencyMatrix::clearGraph() {
     matrix.clear();
     isDirected = isWeighted = false;
+    edgesCount = 0;
 }
+
+int AdjacencyMatrix::getVerticesCount() { return matrix.size(); }
+
+int AdjacencyMatrix::getEdgesCount() { return edgesCount; }
 
 AdjacencyList* AdjacencyMatrix::getNewAdjList() {
     std::vector<std::vector<std::pair<int, int>>> list(matrix.size());

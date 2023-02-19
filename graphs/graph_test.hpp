@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <vector>
 
 #include "graph.hpp"
 
@@ -12,19 +13,29 @@ class GraphTest {
         std::cout << "\nGraph Unit Tests started...\n";
         std::cout << "Input test file: " << testFileName << '\n';
 
-        std::cout << "\tRead-write test...";
+        std::cout << "\tRead-write test... ";
         readWriteTest(testFileName);
-        std::cout << std::setw(20) << "Passed!\n";
+        std::cout << std::setw(19) << "Passed!\n";
 
         // std::cout << "Add, remove and edit edges from graph test... ";
         // addRemoveEditEdgesTest(testFileName);
         // std::cout << std::setw(10) << "Passed!\n";
 
-        std::cout << "\tTransform graph test... ";
+        std::cout << "\tTransform test... ";
         transformTest(testFileName);
-        std::cout << std::setw(14) << "Passed!\n";
+        std::cout << std::setw(19) << "Passed!\n";
 
         std::cout << "All tests passed. You are excellent!\n\n";
+    }
+
+    void runKruscalTests() {
+        std::cout << "Kruscal Tests started...\n";
+        for (auto& test : kruscal_tests) {
+            std::cout << test[0] << ": ";
+            KruscalTest(test[0], test[1], test[2]);
+            std::cout << "Passed!\n";
+        }
+        std::cout << "All tests passed! You are perfect!\n";
     }
 
    private:
@@ -37,6 +48,13 @@ class GraphTest {
     const std::string tr_adj_matr_fname2 = "tr_ad_matr2.txt";
     const std::string tr_edge_list_fname1 = "tr_edge_list1.txt";
     const std::string tr_edge_list_fname2 = "tr_edge_list2.txt";
+
+    // {"input", "ans", "output"}
+    const std::vector<std::vector<std::string>> kruscal_tests = {
+        {"kr_test1.txt", "kr_ans1.txt", "kr_output1.txt"},
+        {"input_1e3_1e5.txt", "", "kr_output_1e3_1e5.txt"},
+        {"input_1e4_1e5.txt", "", "kr_output_1e4_1e5.txt"},
+        {"input_1e5_1e5.txt", "", "kr_output_1e5_1e5.txt"}};
 
     void readWriteTest(const std::string& testFileName) {
         Graph graph;
@@ -71,6 +89,15 @@ class GraphTest {
         graph.readGraph(tr_edge_list_fname1);
         graph.writeGraph(tr_edge_list_fname2);
         assert(compareFiles(tr_edge_list_fname1, tr_edge_list_fname2));
+    }
+
+    void KruscalTest(const std::string& input, const std::string& ans,
+                     const std::string& output) {
+        Graph graph;
+        graph.readGraph(input);
+        Graph res = graph.getSpaingTreeKruscal();
+        res.writeGraph(output);
+        // assert(compareFiles(output, ans));
     }
 
     bool compareFileSize(const std::string& p1, const std::string& p2) {

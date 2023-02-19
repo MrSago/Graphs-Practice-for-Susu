@@ -27,6 +27,8 @@ class EdgeList : public GraphRepresentation {
 
     void printGraph() const override;
     void clearGraph() override;
+    int getVerticesCount() override;
+    int getEdgesCount() override;
 
     AdjacencyMatrix* getNewAdjMatrix();
     AdjacencyList* getNewAdjList();

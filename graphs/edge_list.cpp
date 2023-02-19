@@ -45,20 +45,29 @@ void EdgeList::readGraph(std::ifstream& file) {
 }
 
 void EdgeList::writeGraph(std::ofstream& file) {
-    file << verticesCount << ' ' << edges.size() << '\n';
+    std::map<std::pair<int, int>, bool> used;
+
+    file << verticesCount << ' '
+         << (isDirected ? edges.size() : edges.size() / 2) << '\n';
     file << isDirected << ' ' << isWeighted << '\n';
 
     if (isWeighted) {
         for (const auto& [edge, weight] : edges) {
-            if (weight) {
+            if (weight && !used[{edge.first, edge.second}] &&
+                !used[{edge.second, edge.first}]) {
                 file << edge.first + 1 << ' ' << edge.second + 1 << ' '
                      << weight << '\n';
+                used[{edge.first, edge.second}] = true;
+                used[{edge.second, edge.first}] = true;
             }
         }
     } else {
         for (const auto& [edge, weight] : edges) {
-            if (weight) {
+            if (weight && !used[{edge.first, edge.second}] &&
+                !used[{edge.second, edge.first}]) {
                 file << edge.first + 1 << ' ' << edge.second + 1 << '\n';
+                used[{edge.first, edge.second}] = true;
+                used[{edge.second, edge.first}] = true;
             }
         }
     }
@@ -107,19 +116,26 @@ void EdgeList::changeEdge(const int from, const int to, const int weight) {
 }
 
 void EdgeList::printGraph() const {
+    std::map<std::pair<int, int>, bool> used;
     std::cout << "Edges list:\n";
     if (isWeighted) {
         for (const auto& [edge, weight] : edges) {
-            if (weight) {
+            if (weight && !used[{edge.first, edge.second}] &&
+                !used[{edge.second, edge.first}]) {
                 std::cout << edge.first + 1 << " -> " << edge.second + 1
-                          << " (weight: " << weight << ")\n";
+                          << " (w: " << weight << ")\n";
+                used[{edge.first, edge.second}] = true;
+                used[{edge.second, edge.first}] = true;
             }
         }
     } else {
         for (const auto& [edge, weight] : edges) {
-            if (weight) {
+            if (weight && !used[{edge.first, edge.second}] &&
+                !used[{edge.second, edge.first}]) {
                 std::cout << edge.first + 1 << " -> " << edge.second + 1
                           << '\n';
+                used[{edge.first, edge.second}] = true;
+                used[{edge.second, edge.first}] = true;
             }
         }
     }
@@ -130,6 +146,10 @@ void EdgeList::clearGraph() {
     verticesCount = 0;
     isDirected = isWeighted = false;
 }
+
+int EdgeList::getVerticesCount() { return verticesCount; }
+
+int EdgeList::getEdgesCount() { return edges.size(); }
 
 AdjacencyMatrix* EdgeList::getNewAdjMatrix() {
     std::vector<std::vector<int>> matrix(verticesCount,

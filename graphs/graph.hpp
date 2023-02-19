@@ -18,6 +18,7 @@ enum class GraphType : char {
 class Graph {
    public:
     Graph() = default;
+    Graph(GraphRepresentation* graph, GraphType gtype);
     ~Graph();
 
     void readGraph(const std::string& fileName);
@@ -33,13 +34,17 @@ class Graph {
     void transformToAdjList();
     void transformToListOfEdges();
 
-   private:
-    GraphType graphType = GraphType::Unknown;
-    GraphRepresentation* graphRepr;
+    Graph getSpaingTreeKruscal();
 
+   private:
+    GraphRepresentation* graphRepr;
+    GraphType graphType = GraphType::Unknown;
     Kruscal kruscal;
 
-    void allocNewGraph();
+    GraphRepresentation* allocNewGraph();
+    AdjacencyMatrix* convertToAdjMatrix();
+    AdjacencyList* convertToAdjList();
+    EdgeList* convertToEdgeList();
 };
 
 #endif  // GRAPH_HPP

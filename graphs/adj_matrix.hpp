@@ -26,6 +26,8 @@ class AdjacencyMatrix : public GraphRepresentation {
 
     void printGraph() const override;
     void clearGraph() override;
+    int getVerticesCount() override;
+    int getEdgesCount() override;
 
     AdjacencyList* getNewAdjList();
     EdgeList* getNewListOfEdges();
@@ -36,6 +38,7 @@ class AdjacencyMatrix : public GraphRepresentation {
     std::vector<std::vector<int>> matrix;
     bool isDirected = false;
     bool isWeighted = false;
+    int edgesCount = 0;
 
     bool isVerticeExist(const int vertice) const;
     bool isEdgeExist(const int from, const int to) const;
