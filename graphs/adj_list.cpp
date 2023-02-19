@@ -26,26 +26,32 @@ void AdjacencyList::readGraph(std::ifstream& file) {
     file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
     if (isWeighted) {
-        int from, to, weight;
-        from = to = weight = 0;
+        int from_idx, to, weight;
+        from_idx = to = weight = 0;
         std::string line;
         while (std::getline(file, line)) {
             std::istringstream iss(line);
             while (iss >> to >> weight) {
-                list[from].push_back({to - 1, weight});
+                list[from_idx].push_back({to - 1, weight});
+                if (!isDirected) {
+                    list[to - 1].push_back({from_idx, weight});
+                }
             }
-            ++from;
+            ++from_idx;
         }
     } else {
-        int from, to;
-        from = to = 0;
+        int from_idx, to;
+        from_idx = to = 0;
         std::string line;
         while (std::getline(file, line)) {
             std::istringstream iss(line);
             while (iss >> to) {
-                list[from].push_back({to - 1, 1});
+                list[from_idx].push_back({to - 1, 1});
+                if (!isDirected) {
+                    list[to - 1].push_back({from_idx, 1});
+                }
             }
-            ++from;
+            ++from_idx;
         }
     }
 }
@@ -110,7 +116,7 @@ void AdjacencyList::changeEdge(const int from, const int to, const int weight) {
         list[from_idx].begin(), list[from_idx].end(),
         [to_idx](const auto& edge) { return edge.first == to_idx; });
     if (edge_iter != list[from_idx].end()) {
-        edge_iter->first = weight;
+        edge_iter->second = weight;
     }
 
     if (!isDirected) {
@@ -118,7 +124,7 @@ void AdjacencyList::changeEdge(const int from, const int to, const int weight) {
             list[to_idx].begin(), list[to_idx].end(),
             [from_idx](const auto& edge) { return edge.first == from_idx; });
         if (edge_iter != list[to_idx].end()) {
-            edge_iter->first = weight;
+            edge_iter->second = weight;
         }
     }
 }
@@ -180,6 +186,10 @@ bool AdjacencyList::isVerticeExist(const int vertice) const {
 }
 
 bool AdjacencyList::isEdgeExist(const int from, const int to) const {
+    if (!isVerticeExist(from) || !isVerticeExist(to)) {
+        return false;
+    }
+
     int from_idx = from - 1;
     int to_idx = to - 1;
     return std::any_of(

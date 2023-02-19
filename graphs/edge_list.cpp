@@ -28,12 +28,18 @@ void EdgeList::readGraph(std::ifstream& file) {
             int from, to, weight;
             file >> from >> to >> weight;
             edges[{from - 1, to - 1}] = weight;
+            if (!isDirected) {
+                edges[{to - 1, from - 1}] = weight;
+            }
         }
     } else {
         while (edgeCount--) {
             int from, to;
             file >> from >> to;
             edges[{from - 1, to - 1}] = 1;
+            if (!isDirected) {
+                edges[{to - 1, from - 1}] = 1;
+            }
         }
     }
 }
