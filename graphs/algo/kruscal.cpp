@@ -1,10 +1,8 @@
 
 #include "kruscal.hpp"
 
-EdgeList* Kruscal::getSpaingTreeDenseGraph(AdjacencyMatrix& adjMatrix) {
-    constexpr int INF = int(1e9);
-
-    auto& matrix = adjMatrix.getMatrix();
+EdgeList* Kruscal::getSpaingTreeDenseGraph(AdjacencyMatrix* adjMatrix) {
+    auto& matrix = adjMatrix->getMatrix();
     std::map<std::pair<int, int>, int> tree;
     std::vector<bool> used(matrix.size());
     std::vector<int> min_e(matrix.size(), INF);
@@ -15,7 +13,9 @@ EdgeList* Kruscal::getSpaingTreeDenseGraph(AdjacencyMatrix& adjMatrix) {
         int v = -1;
 
         for (int j = 0; j < matrix.size(); ++j) {
-            if (!used[j] && (v == -1 || min_e[j] < min_e[v])) v = j;
+            if (!used[j] && (v == -1 || min_e[j] < min_e[v])) {
+                v = j;
+            }
         }
 
         if (min_e[v] == INF) {
@@ -25,21 +25,22 @@ EdgeList* Kruscal::getSpaingTreeDenseGraph(AdjacencyMatrix& adjMatrix) {
         used[v] = true;
         if (sel_e[v] != -1) {
             tree[{v, sel_e[v]}] = min_e[v];
+            tree[{sel_e[v], v}] = min_e[v];
         }
 
-        for (int to = 0; to < matrix.size(); ++to)
+        for (int to = 0; to < matrix.size(); ++to) {
             if (matrix[v][to] < min_e[to]) {
                 min_e[to] = matrix[v][to];
                 sel_e[to] = v;
             }
+        }
     }
+
     return new EdgeList(std::move(tree), false, true, matrix.size());
 }
 
-EdgeList* Kruscal::getSpaingTreeSparseGraph(AdjacencyList& adjList) {
-    constexpr int INF = int(1e9);
-
-    auto& list = adjList.getList();
+EdgeList* Kruscal::getSpaingTreeSparseGraph(AdjacencyList* adjList) {
+    auto& list = adjList->getList();
     std::map<std::pair<int, int>, int> tree;
     std::vector<int> min_e(list.size(), INF);
     std::vector<int> sel_e(list.size(), -1);
@@ -58,6 +59,8 @@ EdgeList* Kruscal::getSpaingTreeSparseGraph(AdjacencyList& adjList) {
 
         if (sel_e[v] != -1) {
             tree[{v, sel_e[v]}] = min_e[v];
+            tree[{sel_e[v], v}] = min_e[v];
+            min_e[v] = 0;
         }
 
         for (size_t j = 0; j < list[v].size(); ++j) {

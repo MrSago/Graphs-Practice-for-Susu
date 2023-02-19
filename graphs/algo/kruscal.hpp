@@ -10,8 +10,11 @@
 
 class Kruscal {
    public:
-    EdgeList* getSpaingTreeDenseGraph(AdjacencyMatrix& adjMatrix);
-    EdgeList* getSpaingTreeSparseGraph(AdjacencyList& adjList);
+    EdgeList* getSpaingTreeDenseGraph(AdjacencyMatrix* adjMatrix);
+    EdgeList* getSpaingTreeSparseGraph(AdjacencyList* adjList);
+
+   private:
+    const int INF = int(1e9);
 };
 
 #endif  // KRUCAL_HPP
