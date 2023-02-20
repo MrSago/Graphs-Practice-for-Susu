@@ -5,6 +5,10 @@
 #include <iostream>
 #include <map>
 
+#include "adj_list.hpp"
+#include "adj_matrix.hpp"
+#include "graph_representation.hpp"
+
 EdgeList::EdgeList(const std::map<std::pair<int, int>, int>&& edges,
                    const bool isDirected, const bool isWeighted,
                    const int verticesCount)
@@ -168,7 +172,9 @@ AdjacencyList* EdgeList::getNewAdjList() {
     return new AdjacencyList(std::move(list), isDirected, isWeighted);
 }
 
-std::map<std::pair<int, int>, int>* EdgeList::getGraphPointer() { return &edges; }
+std::map<std::pair<int, int>, int>* EdgeList::getGraphPointer() {
+    return &edges;
+}
 
 bool EdgeList::isVerticeExist(const int vertice) const {
     return vertice > 0 && vertice <= verticesCount;
