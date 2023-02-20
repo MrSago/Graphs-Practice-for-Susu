@@ -90,19 +90,41 @@ void Graph::transformToListOfEdges() {
     graphType = GraphType::EdgeList;
 }
 
-Graph Graph::getSpaingTreeKruscal() {
+Graph Graph::getSpaingTreePrim() {
     if (graphRepr->getEdgesCount() == graphRepr->getVerticesCount()) {
         AdjacencyMatrix* adjMatrix = convertToAdjMatrix();
-        EdgeList* result = kruscal.getSpaingTreeDenseGraph(adjMatrix);
-        adjMatrix->clearGraph();
-        delete adjMatrix;
+        if (adjMatrix) {
+            EdgeList* result = prim.getSpaingTreeDenseGraph(adjMatrix);
+            adjMatrix->clearGraph();
+            delete adjMatrix;
+            return Graph(result, GraphType::EdgeList);
+        }
+        EdgeList* result = prim.getSpaingTreeDenseGraph(
+            static_cast<AdjacencyMatrix*>(graphRepr));
         return Graph(result, GraphType::EdgeList);
     }
 
     AdjacencyList* adjList = convertToAdjList();
-    EdgeList* result = kruscal.getSpaingTreeSparseGraph(adjList);
-    adjList->clearGraph();
-    delete adjList;
+    if (adjList) {
+        EdgeList* result = prim.getSpaingTreeSparseGraph(adjList);
+        adjList->clearGraph();
+        delete adjList;
+        return Graph(result, GraphType::EdgeList);
+    }
+    EdgeList* result =
+        prim.getSpaingTreeSparseGraph(static_cast<AdjacencyList*>(graphRepr));
+    return Graph(result, GraphType::EdgeList);
+}
+
+Graph Graph::getSpaingTreeKruscal() {
+    EdgeList* edgeList = convertToEdgeList();
+    if (edgeList) {
+        EdgeList* result = kruscal.getSpaingTree(edgeList);
+        edgeList->clearGraph();
+        delete edgeList;
+        return Graph(result, GraphType::EdgeList);
+    }
+    EdgeList* result = kruscal.getSpaingTree(static_cast<EdgeList*>(graphRepr));
     return Graph(result, GraphType::EdgeList);
 }
 

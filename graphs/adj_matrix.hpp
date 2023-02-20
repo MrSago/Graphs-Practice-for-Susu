@@ -32,7 +32,7 @@ class AdjacencyMatrix : public GraphRepresentation {
     AdjacencyList* getNewAdjList();
     EdgeList* getNewListOfEdges();
 
-    std::vector<std::vector<int>>& getMatrix();
+    std::vector<std::vector<int>>* getGraphPointer();
 
    private:
     std::vector<std::vector<int>> matrix;

@@ -33,7 +33,7 @@ class EdgeList : public GraphRepresentation {
     AdjacencyMatrix* getNewAdjMatrix();
     AdjacencyList* getNewAdjList();
 
-    std::map<std::pair<int, int>, int>& getEdges();
+    std::map<std::pair<int, int>, int>* getGraphPointer();
 
    private:
     // map: key - pair of vertices, value - weight

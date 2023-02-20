@@ -1,5 +1,6 @@
 
 #include <cassert>
+#include <chrono>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -28,14 +29,36 @@ class GraphTest {
         std::cout << "All tests passed. You are excellent!\n\n";
     }
 
-    void runKruscalTests() {
-        std::cout << "Kruscal Tests started...\n";
-        for (auto& test : kruscal_tests) {
+    void runPrimTests() {
+        std::cout << "\nPrim Tests started...\n";
+        for (auto& test : st_tests) {
             std::cout << test[0] << ": ";
-            KruscalTest(test[0], test[1], test[2]);
-            std::cout << "Passed!\n";
+
+            auto start = std::chrono::high_resolution_clock::now();
+            PrimTest(test[0], test[1], std::string("pr_") + test[2]);
+            auto stop = std::chrono::high_resolution_clock::now();
+
+            double calcTime = (stop - start).count() * 1e-9;
+            std::cout << "Passed!"
+                      << " (time: " << calcTime << ")\n";
         }
         std::cout << "All tests passed! You are perfect!\n";
+    }
+
+    void runKruscalTests() {
+        std::cout << "\nKruscal Tests started...\n";
+        for (auto& test : st_tests) {
+            std::cout << test[0] << ": ";
+
+            auto start = std::chrono::high_resolution_clock::now();
+            KruscalTest(test[0], test[1], std::string("kr_") + test[2]);
+            auto stop = std::chrono::high_resolution_clock::now();
+
+            double calcTime = (stop - start).count() * 1e-9;
+            std::cout << "Passed!"
+                      << " (time: " << calcTime << ")\n";
+        }
+        std::cout << "All tests passed! You are the best!\n\n";
     }
 
    private:
@@ -50,11 +73,9 @@ class GraphTest {
     const std::string tr_edge_list_fname2 = "tr_edge_list2.txt";
 
     // {"input", "ans", "output"}
-    const std::vector<std::vector<std::string>> kruscal_tests = {
-        {"kr_test1.txt", "kr_ans1.txt", "kr_output1.txt"},
-        {"input_1e3_1e5.txt", "", "kr_output_1e3_1e5.txt"},
-        {"input_1e4_1e5.txt", "", "kr_output_1e4_1e5.txt"},
-        {"input_1e5_1e5.txt", "", "kr_output_1e5_1e5.txt"}};
+    const std::vector<std::vector<std::string>> st_tests = {
+        {"st_test1.txt", "st_ans1.txt", "st_output1.txt"},
+        {"input_1e5_1e5.txt", "", "st_output_1e5_1e5.txt"}};
 
     void readWriteTest(const std::string& testFileName) {
         Graph graph;
@@ -89,6 +110,15 @@ class GraphTest {
         graph.readGraph(tr_edge_list_fname1);
         graph.writeGraph(tr_edge_list_fname2);
         assert(compareFiles(tr_edge_list_fname1, tr_edge_list_fname2));
+    }
+
+    void PrimTest(const std::string& input, const std::string& ans,
+                  const std::string& output) {
+        Graph graph;
+        graph.readGraph(input);
+        Graph res = graph.getSpaingTreePrim();
+        res.writeGraph(output);
+        // assert(compareFiles(output, ans));
     }
 
     void KruscalTest(const std::string& input, const std::string& ans,

@@ -7,6 +7,7 @@
 #include "edge_list.hpp"
 #include "graph_representation.hpp"
 #include "kruscal.hpp"
+#include "prim.hpp"
 
 enum class GraphType : char {
     AdjacencyMatrix = 'C',
@@ -34,11 +35,14 @@ class Graph {
     void transformToAdjList();
     void transformToListOfEdges();
 
+    Graph getSpaingTreePrim();
     Graph getSpaingTreeKruscal();
 
    private:
     GraphRepresentation* graphRepr;
     GraphType graphType = GraphType::Unknown;
+
+    Prim prim;
     Kruscal kruscal;
 
     GraphRepresentation* allocNewGraph();

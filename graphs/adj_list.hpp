@@ -34,7 +34,7 @@ class AdjacencyList : public GraphRepresentation {
     AdjacencyMatrix* getNewAdjMatrix();
     EdgeList* getNewListOfEdges();
 
-    std::vector<std::vector<std::pair<int, int>>>& getList();
+    std::vector<std::vector<std::pair<int, int>>>* getGraphPointer();
 
    private:
     // vector[from][i] = {to, weight};

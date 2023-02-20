@@ -7,6 +7,7 @@ int main() {
     // test.runUnitTests("input_1e3_1e5.txt");
     // test.runUnitTests("input_1e4_1e5.txt");
     // test.runUnitTests("input_1e5_1e5.txt");
+    test.runPrimTests();
     test.runKruscalTests();
     return 0;
 }

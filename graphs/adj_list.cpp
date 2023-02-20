@@ -206,8 +206,8 @@ EdgeList* AdjacencyList::getNewListOfEdges() {
     return new EdgeList(std::move(edges), isDirected, isWeighted, list.size());
 }
 
-std::vector<std::vector<std::pair<int, int>>>& AdjacencyList::getList() {
-    return list;
+std::vector<std::vector<std::pair<int, int>>>* AdjacencyList::getGraphPointer() {
+    return &list;
 }
 
 bool AdjacencyList::isVerticeExist(const int vertice) const {

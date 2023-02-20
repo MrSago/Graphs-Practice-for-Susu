@@ -135,7 +135,7 @@ EdgeList* AdjacencyMatrix::getNewListOfEdges() {
                         matrix.size());
 }
 
-std::vector<std::vector<int>>& AdjacencyMatrix::getMatrix() { return matrix; }
+std::vector<std::vector<int>>* AdjacencyMatrix::getGraphPointer() { return &matrix; }
 
 bool AdjacencyMatrix::isVerticeExist(const int vertice) const {
     return vertice > 0 && vertice <= matrix.size();
