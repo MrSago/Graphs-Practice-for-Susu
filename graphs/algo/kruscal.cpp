@@ -3,6 +3,9 @@
 
 #include <algorithm>
 
+#include "DSU.hpp"
+#include "edge_list.hpp"
+
 EdgeList* Kruscal::getSpaingTree(EdgeList* edgeList) {
     auto list = edgeList->getGraphPointer();
     int verticesCount = edgeList->getVerticesCount();

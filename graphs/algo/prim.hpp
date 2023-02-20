@@ -2,8 +2,7 @@
 #ifndef PRIM_HPP
 #define PRIM_HPP
 
-#include <map>
-#include <vector>
+
 
 #include "adj_matrix.hpp"
 #include "edge_list.hpp"

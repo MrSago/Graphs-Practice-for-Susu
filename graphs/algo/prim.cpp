@@ -1,6 +1,13 @@
 
 #include "prim.hpp"
 
+#include <map>
+#include <set>
+#include <vector>
+
+#include "adj_matrix.hpp"
+#include "edge_list.hpp"
+
 EdgeList* Prim::getSpaingTreeDenseGraph(AdjacencyMatrix* adjMatrix) {
     auto matrix = adjMatrix->getGraphPointer();
     std::map<std::pair<int, int>, int> tree;

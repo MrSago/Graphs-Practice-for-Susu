@@ -2,12 +2,17 @@
 #include "adj_list.hpp"
 
 #include <algorithm>
+#include <fstream>
 #include <iostream>
 #include <limits>
 #include <map>
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include "adj_matrix.hpp"
+#include "edge_list.hpp"
+#include "graph_representation.hpp"
 
 AdjacencyList::AdjacencyList(
     const std::vector<std::vector<std::pair<int, int>>>&& list,
@@ -206,7 +211,8 @@ EdgeList* AdjacencyList::getNewListOfEdges() {
     return new EdgeList(std::move(edges), isDirected, isWeighted, list.size());
 }
 
-std::vector<std::vector<std::pair<int, int>>>* AdjacencyList::getGraphPointer() {
+std::vector<std::vector<std::pair<int, int>>>*
+AdjacencyList::getGraphPointer() {
     return &list;
 }
 

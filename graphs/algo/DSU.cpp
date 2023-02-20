@@ -2,6 +2,7 @@
 #include "DSU.hpp"
 
 #include <numeric>
+#include <vector>
 
 DSU::DSU(int N) : parent(N), rank(N, 0) {
     std::iota(parent.begin(), parent.end(), 0);

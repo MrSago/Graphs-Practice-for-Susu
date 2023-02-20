@@ -4,6 +4,13 @@
 #include <fstream>
 #include <iostream>
 
+#include "adj_list.hpp"
+#include "adj_matrix.hpp"
+#include "edge_list.hpp"
+#include "graph_representation.hpp"
+#include "kruscal.hpp"
+#include "prim.hpp"
+
 Graph::Graph(GraphRepresentation* graph, GraphType gtype)
     : graphRepr(graph), graphType(gtype) {}
 

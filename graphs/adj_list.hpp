@@ -3,8 +3,6 @@
 #define ADJ_LIST_HPP
 
 #include <fstream>
-#include <set>
-#include <tuple>
 #include <vector>
 
 #include "adj_matrix.hpp"

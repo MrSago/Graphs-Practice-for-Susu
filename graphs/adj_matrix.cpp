@@ -5,6 +5,10 @@
 #include <iostream>
 #include <vector>
 
+#include "adj_list.hpp"
+#include "edge_list.hpp"
+#include "graph_representation.hpp"
+
 AdjacencyMatrix::AdjacencyMatrix(const std::vector<std::vector<int>>&& matrix,
                                  const bool isDirected, const bool isWeighted)
     : matrix(matrix), isDirected(isDirected), isWeighted(isWeighted) {}
@@ -135,7 +139,9 @@ EdgeList* AdjacencyMatrix::getNewListOfEdges() {
                         matrix.size());
 }
 
-std::vector<std::vector<int>>* AdjacencyMatrix::getGraphPointer() { return &matrix; }
+std::vector<std::vector<int>>* AdjacencyMatrix::getGraphPointer() {
+    return &matrix;
+}
 
 bool AdjacencyMatrix::isVerticeExist(const int vertice) const {
     return vertice > 0 && vertice <= matrix.size();
