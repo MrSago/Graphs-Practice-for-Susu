@@ -1,48 +1,48 @@
 
-#include "edge_list.hpp"
+#include "edge_list.h"
 
 #include <fstream>
 #include <iostream>
 #include <map>
 
-#include "adj_list.hpp"
-#include "adj_matrix.hpp"
-#include "graph_representation.hpp"
+#include "adj_list.h"
+#include "adj_matrix.h"
+#include "graph_representation.h"
 
 EdgeList::EdgeList(const std::map<std::pair<int, int>, int>&& edges,
-                   const bool isDirected, const bool isWeighted,
-                   const int verticesCount)
-    : edges(edges),
-      isDirected(isDirected),
-      isWeighted(isWeighted),
-      verticesCount(verticesCount) {}
+                   const bool directed, const bool weighted,
+                   const int vertices_count)
+    : edges_(edges),
+      directed_(directed),
+      weighted_(weighted),
+      vertices_count_(vertices_count) {}
 
 void EdgeList::readGraph(std::ifstream& file) {
     clearGraph();
 
-    file >> verticesCount;
+    file >> vertices_count_;
 
-    int edgeCount;
-    file >> edgeCount;
+    int edge_count;
+    file >> edge_count;
 
-    file >> isDirected >> isWeighted;
+    file >> directed_ >> weighted_;
 
-    if (isWeighted) {
-        while (edgeCount--) {
+    if (weighted_) {
+        while (edge_count--) {
             int from, to, weight;
             file >> from >> to >> weight;
-            edges[{from - 1, to - 1}] = weight;
-            if (!isDirected) {
-                edges[{to - 1, from - 1}] = weight;
+            edges_[{from - 1, to - 1}] = weight;
+            if (!directed_) {
+                edges_[{to - 1, from - 1}] = weight;
             }
         }
     } else {
-        while (edgeCount--) {
+        while (edge_count--) {
             int from, to;
             file >> from >> to;
-            edges[{from - 1, to - 1}] = 1;
-            if (!isDirected) {
-                edges[{to - 1, from - 1}] = 1;
+            edges_[{from - 1, to - 1}] = 1;
+            if (!directed_) {
+                edges_[{to - 1, from - 1}] = 1;
             }
         }
     }
@@ -51,12 +51,12 @@ void EdgeList::readGraph(std::ifstream& file) {
 void EdgeList::writeGraph(std::ofstream& file) {
     std::map<std::pair<int, int>, bool> used;
 
-    file << verticesCount << ' '
-         << (isDirected ? edges.size() : edges.size() / 2) << '\n';
-    file << isDirected << ' ' << isWeighted << '\n';
+    file << vertices_count_ << ' '
+         << (directed_ ? edges_.size() : edges_.size() / 2) << '\n';
+    file << directed_ << ' ' << weighted_ << '\n';
 
-    if (isWeighted) {
-        for (const auto& [edge, weight] : edges) {
+    if (weighted_) {
+        for (const auto& [edge, weight] : edges_) {
             if (weight && !used[{edge.first, edge.second}] &&
                 !used[{edge.second, edge.first}]) {
                 file << edge.first + 1 << ' ' << edge.second + 1 << ' '
@@ -66,7 +66,7 @@ void EdgeList::writeGraph(std::ofstream& file) {
             }
         }
     } else {
-        for (const auto& [edge, weight] : edges) {
+        for (const auto& [edge, weight] : edges_) {
             if (weight && !used[{edge.first, edge.second}] &&
                 !used[{edge.second, edge.first}]) {
                 file << edge.first + 1 << ' ' << edge.second + 1 << '\n';
@@ -85,9 +85,9 @@ void EdgeList::addEdge(const int from, const int to, const int weight) {
     int from_idx = from - 1;
     int to_idx = to - 1;
 
-    edges[{from_idx, to_idx}] = weight;
-    if (!isDirected) {
-        edges[{to_idx, from_idx}] = weight;
+    edges_[{from_idx, to_idx}] = weight;
+    if (!directed_) {
+        edges_[{to_idx, from_idx}] = weight;
     }
 }
 
@@ -99,9 +99,9 @@ void EdgeList::removeEdge(const int from, const int to) {
     int from_idx = from - 1;
     int to_idx = to - 1;
 
-    edges[{from_idx, to_idx}] = 0;
-    if (!isDirected) {
-        edges[{to_idx, from_idx}] = 0;
+    edges_[{from_idx, to_idx}] = 0;
+    if (!directed_) {
+        edges_[{to_idx, from_idx}] = 0;
     }
 }
 
@@ -113,17 +113,17 @@ void EdgeList::changeEdge(const int from, const int to, const int weight) {
     int from_idx = from - 1;
     int to_idx = to - 1;
 
-    edges[{from_idx, to_idx}] = weight;
-    if (!isDirected) {
-        edges[{to_idx, from_idx}] = weight;
+    edges_[{from_idx, to_idx}] = weight;
+    if (!directed_) {
+        edges_[{to_idx, from_idx}] = weight;
     }
 }
 
 void EdgeList::printGraph() const {
     std::map<std::pair<int, int>, bool> used;
     std::cout << "Edges list:\n";
-    if (isWeighted) {
-        for (const auto& [edge, weight] : edges) {
+    if (weighted_) {
+        for (const auto& [edge, weight] : edges_) {
             if (weight && !used[{edge.first, edge.second}] &&
                 !used[{edge.second, edge.first}]) {
                 std::cout << edge.first + 1 << " -> " << edge.second + 1
@@ -133,7 +133,7 @@ void EdgeList::printGraph() const {
             }
         }
     } else {
-        for (const auto& [edge, weight] : edges) {
+        for (const auto& [edge, weight] : edges_) {
             if (weight && !used[{edge.first, edge.second}] &&
                 !used[{edge.second, edge.first}]) {
                 std::cout << edge.first + 1 << " -> " << edge.second + 1
@@ -146,41 +146,41 @@ void EdgeList::printGraph() const {
 }
 
 void EdgeList::clearGraph() {
-    edges.clear();
-    verticesCount = 0;
-    isDirected = isWeighted = false;
+    edges_.clear();
+    vertices_count_ = 0;
+    directed_ = weighted_ = false;
 }
 
-int EdgeList::getVerticesCount() { return verticesCount; }
+int EdgeList::getVerticesCount() { return vertices_count_; }
 
-int EdgeList::getEdgesCount() { return edges.size(); }
+int EdgeList::getEdgesCount() { return edges_.size(); }
 
 AdjacencyMatrix* EdgeList::getNewAdjMatrix() {
-    std::vector<std::vector<int>> matrix(verticesCount,
-                                         std::vector<int>(verticesCount, 0));
-    for (const auto& [edge, weight] : edges) {
+    std::vector<std::vector<int>> matrix(vertices_count_,
+                                         std::vector<int>(vertices_count_, 0));
+    for (const auto& [edge, weight] : edges_) {
         matrix[edge.first][edge.second] = weight;
     }
-    return new AdjacencyMatrix(std::move(matrix), isDirected, isWeighted);
+    return new AdjacencyMatrix(std::move(matrix), directed_, weighted_);
 }
 
 AdjacencyList* EdgeList::getNewAdjList() {
-    std::vector<std::vector<std::pair<int, int>>> list(verticesCount);
-    for (const auto& [edge, weight] : edges) {
+    std::vector<std::vector<std::pair<int, int>>> list(vertices_count_);
+    for (const auto& [edge, weight] : edges_) {
         list[edge.first].push_back({edge.second, weight});
     }
-    return new AdjacencyList(std::move(list), isDirected, isWeighted);
+    return new AdjacencyList(std::move(list), directed_, weighted_);
 }
 
 std::map<std::pair<int, int>, int>* EdgeList::getGraphPointer() {
-    return &edges;
+    return &edges_;
 }
 
 bool EdgeList::isVerticeExist(const int vertice) const {
-    return vertice > 0 && vertice <= verticesCount;
+    return vertice > 0 && vertice <= vertices_count_;
 }
 
 bool EdgeList::isEdgeExist(const int from, const int to) const {
     return isVerticeExist(from) && isVerticeExist(to) &&
-           edges.at({from - 1, to - 1});
+           edges_.at({from - 1, to - 1});
 }

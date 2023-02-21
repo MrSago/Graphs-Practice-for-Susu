@@ -1,4 +1,7 @@
 
+#ifndef GRAPH_TEST_HPP
+#define GRAPH_TEST_HPP
+
 #include <cassert>
 #include <chrono>
 #include <fstream>
@@ -6,7 +9,7 @@
 #include <iostream>
 #include <vector>
 
-#include "graph.hpp"
+#include "graph.h"
 
 class GraphTest {
    public:
@@ -164,3 +167,5 @@ class GraphTest {
                           std::istreambuf_iterator<char>(f2.rdbuf()));
     }
 };
+
+#endif // GRAPH_TEST_HPP

@@ -1,5 +1,5 @@
 
-#include "graph.hpp"
+#include "graph.h"
 #include "graph_test.hpp"
 
 int main() {

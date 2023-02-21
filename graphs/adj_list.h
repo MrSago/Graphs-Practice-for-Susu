@@ -1,13 +1,13 @@
 
-#ifndef ADJ_LIST_HPP
-#define ADJ_LIST_HPP
+#ifndef ADJ_LIST_H
+#define ADJ_LIST_H
 
 #include <fstream>
 #include <vector>
 
-#include "adj_matrix.hpp"
-#include "edge_list.hpp"
-#include "graph_representation.hpp"
+#include "adj_matrix.h"
+#include "edge_list.h"
+#include "graph_representation.h"
 
 class AdjacencyMatrix;
 class EdgeList;
@@ -16,7 +16,7 @@ class AdjacencyList : public GraphRepresentation {
    public:
     AdjacencyList() = default;
     AdjacencyList(const std::vector<std::vector<std::pair<int, int>>>&& list,
-                  const bool isDirected, const bool isWeighted);
+                  const bool directed, const bool weighted);
 
     void readGraph(std::ifstream& file) override;
     void writeGraph(std::ofstream& file) override;
@@ -35,14 +35,14 @@ class AdjacencyList : public GraphRepresentation {
     std::vector<std::vector<std::pair<int, int>>>* getGraphPointer();
 
    private:
-    // vector[from][i] = {to, weight};
-    std::vector<std::vector<std::pair<int, int>>> list;
-    bool isDirected = false;
-    bool isWeighted = false;
-    int edgesCount = 0;
+    // list_[from][i] = {to, weight};
+    std::vector<std::vector<std::pair<int, int>>> list_;
+    bool directed_ = false;
+    bool weighted_ = false;
+    int edges_count_ = 0;
 
     bool isVerticeExist(const int vertice) const;
     bool isEdgeExist(const int from, const int to) const;
 };
 
-#endif  // ADJ_LIST_HPP
+#endif  // ADJ_LIST_H

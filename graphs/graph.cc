@@ -1,15 +1,15 @@
 
-#include "graph.hpp"
+#include "graph.h"
 
 #include <fstream>
 #include <iostream>
 
-#include "adj_list.hpp"
-#include "adj_matrix.hpp"
-#include "edge_list.hpp"
-#include "graph_representation.hpp"
-#include "kruscal.hpp"
-#include "prim.hpp"
+#include "adj_list.h"
+#include "adj_matrix.h"
+#include "edge_list.h"
+#include "graph_representation.h"
+#include "kruscal.h"
+#include "prim.h"
 
 Graph::Graph(GraphRepresentation* graph, GraphType gtype)
     : graphRepr(graph), graphType(gtype) {}

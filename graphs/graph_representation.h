@@ -1,6 +1,6 @@
 
-#ifndef GRAPH_REPRESENTATION_HPP
-#define GRAPH_REPRESENTATION_HPP
+#ifndef GRAPH_REPRESENTATION_H
+#define GRAPH_REPRESENTATION_H
 
 #include <fstream>
 
@@ -21,4 +21,4 @@ class GraphRepresentation {
     virtual ~GraphRepresentation() = default;
 };
 
-#endif  // GRAPH_REPRESENTATION_HPP
+#endif  // GRAPH_REPRESENTATION_H

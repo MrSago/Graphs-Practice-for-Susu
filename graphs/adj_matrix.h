@@ -1,13 +1,13 @@
 
-#ifndef ADJ_MATRIX_HPP
-#define ADJ_MATRIX_HPP
+#ifndef ADJ_MATRIX_H
+#define ADJ_MATRIX_H
 
 #include <fstream>
 #include <vector>
 
-#include "adj_list.hpp"
-#include "edge_list.hpp"
-#include "graph_representation.hpp"
+#include "adj_list.h"
+#include "edge_list.h"
+#include "graph_representation.h"
 
 class AdjacencyList;
 class EdgeList;
@@ -16,7 +16,7 @@ class AdjacencyMatrix : public GraphRepresentation {
    public:
     AdjacencyMatrix() = default;
     AdjacencyMatrix(const std::vector<std::vector<int>>&& matrix,
-                    const bool isDirected, const bool isWeighted);
+                    const bool directed, const bool weighted);
 
     void readGraph(std::ifstream& file) override;
     void writeGraph(std::ofstream& file) override;
@@ -35,13 +35,13 @@ class AdjacencyMatrix : public GraphRepresentation {
     std::vector<std::vector<int>>* getGraphPointer();
 
    private:
-    std::vector<std::vector<int>> matrix;
-    bool isDirected = false;
-    bool isWeighted = false;
-    int edgesCount = 0;
+    std::vector<std::vector<int>> matrix_;
+    bool directed_ = false;
+    bool weighted_ = false;
+    int edges_count_ = 0;
 
     bool isVerticeExist(const int vertice) const;
     bool isEdgeExist(const int from, const int to) const;
 };
 
-#endif  // ADJ_MATRIX_HPP
+#endif  // ADJ_MATRIX_H
