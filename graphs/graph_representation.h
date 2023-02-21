@@ -9,7 +9,7 @@ class GraphRepresentation {
     virtual void readGraph(std::ifstream& file) = 0;
     virtual void writeGraph(std::ofstream& file) = 0;
     virtual void addEdge(const int from, const int to,
-                         const int weight = 0) = 0;
+                         const int weight = 1) = 0;
     virtual void removeEdge(const int from, const int to) = 0;
     virtual void changeEdge(const int from, const int to, const int weight) = 0;
 

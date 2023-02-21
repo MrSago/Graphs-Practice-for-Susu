@@ -6,7 +6,7 @@
 
 class Kruscal {
    public:
-    EdgeList* getSpaingTree(EdgeList* graph);
+    EdgeList* getSpaingTree(EdgeList& graph);
 };
 
 #endif  // KRUSCAL_H

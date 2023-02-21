@@ -11,132 +11,133 @@
 #include "kruscal.h"
 #include "prim.h"
 
-Graph::Graph(GraphRepresentation* graph, GraphType gtype)
-    : graphRepr(graph), graphType(gtype) {}
+Graph::Graph(GraphRepresentation* graph, GraphType graph_type)
+    : graph_repr_(graph), graph_type_(graph_type) {}
 
 Graph::~Graph() { clearGraph(); }
 
-void Graph::readGraph(const std::string& fileName) {
-    std::ifstream file(fileName);
+void Graph::readGraph(const std::string& filename) {
+    std::ifstream file(filename);
     if (file.fail() || !file.is_open()) {
-        std::cerr << "Error opening file: " << fileName << '\n';
+        std::cerr << "Error opening file: " << filename << '\n';
         return;
     }
 
     clearGraph();
 
-    char gtype;
-    file >> gtype;
-    graphType = static_cast<GraphType>(gtype);
-    graphRepr = allocNewGraph();
+    char graph_type;
+    file >> graph_type;
+    graph_type_ = static_cast<GraphType>(graph_type);
+    graph_repr_ = allocNewGraph();
 
-    graphRepr->readGraph(file);
+    graph_repr_->readGraph(file);
 }
 
-void Graph::writeGraph(const std::string& fileName) {
-    std::ofstream file(fileName);
+void Graph::writeGraph(const std::string& filename) {
+    std::ofstream file(filename);
     if (file.fail() || !file.is_open()) {
-        std::cerr << "Error opening file: " << fileName << '\n';
+        std::cerr << "Error opening file: " << filename << '\n';
         return;
     }
 
-    file << static_cast<char>(graphType) << ' ';
+    file << static_cast<char>(graph_type_) << ' ';
 
-    graphRepr->writeGraph(file);
+    graph_repr_->writeGraph(file);
 }
 
 void Graph::addEdge(const int from, const int to, const int weight) {
-    graphRepr->addEdge(from, to, weight);
+    graph_repr_->addEdge(from, to, weight);
 }
 
 void Graph::removeEdge(const int from, const int to) {
-    graphRepr->removeEdge(from, to);
+    graph_repr_->removeEdge(from, to);
 }
 
 void Graph::changeEdge(const int from, const int to, const int weight) {
-    graphRepr->changeEdge(from, to, weight);
+    graph_repr_->changeEdge(from, to, weight);
 }
 
-void Graph::printGraph() { graphRepr->printGraph(); }
+void Graph::printGraph() { graph_repr_->printGraph(); }
 
 void Graph::clearGraph() {
-    if (graphType != GraphType::Unknown) {
-        graphRepr->clearGraph();
-        delete graphRepr;
-        graphType = GraphType::Unknown;
+    if (graph_type_ != GraphType::Unknown) {
+        graph_repr_->clearGraph();
+        delete graph_repr_;
+        graph_type_ = GraphType::Unknown;
     }
 }
 
 void Graph::transformToAdjMatrix() {
-    GraphRepresentation* newGraphRepr = convertToAdjMatrix();
-    if (!newGraphRepr) {
+    GraphRepresentation* new_graph = convertToNewAdjMatrix();
+    if (!new_graph) {
         return;
     }
     clearGraph();
-    graphRepr = newGraphRepr;
-    graphType = GraphType::AdjacencyMatrix;
+    graph_repr_ = new_graph;
+    graph_type_ = GraphType::AdjacencyMatrix;
 }
 
 void Graph::transformToAdjList() {
-    GraphRepresentation* newGraphRepr = convertToAdjList();
-    if (!newGraphRepr) {
+    GraphRepresentation* new_graph = convertToNewAdjList();
+    if (!new_graph) {
         return;
     }
     clearGraph();
-    graphRepr = newGraphRepr;
-    graphType = GraphType::AdjacencyList;
+    graph_repr_ = new_graph;
+    graph_type_ = GraphType::AdjacencyList;
 }
 
 void Graph::transformToListOfEdges() {
-    GraphRepresentation* newGraphRepr = convertToEdgeList();
-    if (!newGraphRepr) {
+    GraphRepresentation* new_graph = convertToNewEdgeList();
+    if (!new_graph) {
         return;
     }
     clearGraph();
-    graphRepr = newGraphRepr;
-    graphType = GraphType::EdgeList;
+    graph_repr_ = new_graph;
+    graph_type_ = GraphType::EdgeList;
 }
 
 Graph Graph::getSpaingTreePrim() {
-    if (graphRepr->getEdgesCount() == graphRepr->getVerticesCount()) {
-        AdjacencyMatrix* adjMatrix = convertToAdjMatrix();
-        if (adjMatrix) {
-            EdgeList* result = prim.getSpaingTreeDenseGraph(adjMatrix);
-            adjMatrix->clearGraph();
-            delete adjMatrix;
+    if (graph_repr_->getEdgesCount() == graph_repr_->getVerticesCount()) {
+        AdjacencyMatrix* adj_matrix = convertToNewAdjMatrix();
+        if (adj_matrix) {
+            EdgeList* result = prim.getSpaingTreeDenseGraph(*adj_matrix);
+            adj_matrix->clearGraph();
+            delete adj_matrix;
             return Graph(result, GraphType::EdgeList);
         }
         EdgeList* result = prim.getSpaingTreeDenseGraph(
-            static_cast<AdjacencyMatrix*>(graphRepr));
+            *(static_cast<AdjacencyMatrix*>(graph_repr_)));
         return Graph(result, GraphType::EdgeList);
     }
 
-    AdjacencyList* adjList = convertToAdjList();
-    if (adjList) {
-        EdgeList* result = prim.getSpaingTreeSparseGraph(adjList);
-        adjList->clearGraph();
-        delete adjList;
+    AdjacencyList* adj_list = convertToNewAdjList();
+    if (adj_list) {
+        EdgeList* result = prim.getSpaingTreeSparseGraph(*adj_list);
+        adj_list->clearGraph();
+        delete adj_list;
         return Graph(result, GraphType::EdgeList);
     }
-    EdgeList* result =
-        prim.getSpaingTreeSparseGraph(static_cast<AdjacencyList*>(graphRepr));
+    EdgeList* result = prim.getSpaingTreeSparseGraph(
+        (*static_cast<AdjacencyList*>(graph_repr_)));
     return Graph(result, GraphType::EdgeList);
 }
 
 Graph Graph::getSpaingTreeKruscal() {
-    EdgeList* edgeList = convertToEdgeList();
-    if (edgeList) {
-        EdgeList* result = kruscal.getSpaingTree(edgeList);
-        edgeList->clearGraph();
-        delete edgeList;
+    EdgeList* edge_list = convertToNewEdgeList();
+    if (edge_list) {
+        EdgeList* result = kruscal.getSpaingTree(*edge_list);
+        edge_list->clearGraph();
+        delete edge_list;
         return Graph(result, GraphType::EdgeList);
     }
-    EdgeList* result = kruscal.getSpaingTree(static_cast<EdgeList*>(graphRepr));
+    EdgeList* result =
+        kruscal.getSpaingTree((*static_cast<EdgeList*>(graph_repr_)));
     return Graph(result, GraphType::EdgeList);
 }
 
 GraphRepresentation* Graph::allocNewGraph() {
-    switch (graphType) {
+    switch (graph_type_) {
         case GraphType::AdjacencyList:
             return new AdjacencyList();
 
@@ -152,13 +153,13 @@ GraphRepresentation* Graph::allocNewGraph() {
     }
 }
 
-AdjacencyMatrix* Graph::convertToAdjMatrix() {
-    switch (graphType) {
+AdjacencyMatrix* Graph::convertToNewAdjMatrix() {
+    switch (graph_type_) {
         case GraphType::AdjacencyList:
-            return static_cast<AdjacencyList*>(graphRepr)->getNewAdjMatrix();
+            return static_cast<AdjacencyList*>(graph_repr_)->getNewAdjMatrix();
 
         case GraphType::EdgeList:
-            return static_cast<EdgeList*>(graphRepr)->getNewAdjMatrix();
+            return static_cast<EdgeList*>(graph_repr_)->getNewAdjMatrix();
 
         case GraphType::AdjacencyMatrix:
         case GraphType::Unknown:
@@ -168,13 +169,13 @@ AdjacencyMatrix* Graph::convertToAdjMatrix() {
     return nullptr;
 }
 
-AdjacencyList* Graph::convertToAdjList() {
-    switch (graphType) {
+AdjacencyList* Graph::convertToNewAdjList() {
+    switch (graph_type_) {
         case GraphType::AdjacencyMatrix:
-            return static_cast<AdjacencyMatrix*>(graphRepr)->getNewAdjList();
+            return static_cast<AdjacencyMatrix*>(graph_repr_)->getNewAdjList();
 
         case GraphType::EdgeList:
-            return static_cast<EdgeList*>(graphRepr)->getNewAdjList();
+            return static_cast<EdgeList*>(graph_repr_)->getNewAdjList();
 
         case GraphType::AdjacencyList:
         case GraphType::Unknown:
@@ -184,13 +185,14 @@ AdjacencyList* Graph::convertToAdjList() {
     return nullptr;
 }
 
-EdgeList* Graph::convertToEdgeList() {
-    switch (graphType) {
+EdgeList* Graph::convertToNewEdgeList() {
+    switch (graph_type_) {
         case GraphType::AdjacencyList:
-            return static_cast<AdjacencyList*>(graphRepr)->getNewListOfEdges();
+            return static_cast<AdjacencyList*>(graph_repr_)
+                ->getNewListOfEdges();
 
         case GraphType::AdjacencyMatrix:
-            return static_cast<AdjacencyMatrix*>(graphRepr)
+            return static_cast<AdjacencyMatrix*>(graph_repr_)
                 ->getNewListOfEdges();
 
         case GraphType::EdgeList:

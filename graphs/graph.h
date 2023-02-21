@@ -19,12 +19,12 @@ enum class GraphType : char {
 class Graph {
    public:
     Graph() = default;
-    Graph(GraphRepresentation* graph, GraphType gtype);
+    Graph(GraphRepresentation* graph, GraphType graph_type);
     ~Graph();
 
-    void readGraph(const std::string& fileName);
-    void writeGraph(const std::string& fileName);
-    void addEdge(const int from, const int to, const int weight);
+    void readGraph(const std::string& filename);
+    void writeGraph(const std::string& filename);
+    void addEdge(const int from, const int to, const int weight = 1);
     void removeEdge(const int from, const int to);
     void changeEdge(const int from, const int to, const int weight);
 
@@ -39,16 +39,16 @@ class Graph {
     Graph getSpaingTreeKruscal();
 
    private:
-    GraphRepresentation* graphRepr;
-    GraphType graphType = GraphType::Unknown;
+    GraphRepresentation* graph_repr_;
+    GraphType graph_type_ = GraphType::Unknown;
 
     Prim prim;
     Kruscal kruscal;
 
     GraphRepresentation* allocNewGraph();
-    AdjacencyMatrix* convertToAdjMatrix();
-    AdjacencyList* convertToAdjList();
-    EdgeList* convertToEdgeList();
+    AdjacencyMatrix* convertToNewAdjMatrix();
+    AdjacencyList* convertToNewAdjList();
+    EdgeList* convertToNewEdgeList();
 };
 
 #endif  // GRAPH_H

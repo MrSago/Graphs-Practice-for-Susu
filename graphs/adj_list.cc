@@ -19,6 +19,10 @@ AdjacencyList::AdjacencyList(
     const bool directed, const bool weighted)
     : list_(list), directed_(directed), weighted_(weighted) {}
 
+AdjacencyList::AdjacencyList(const bool directed, const bool weighted,
+                             const int vertices_count)
+    : directed_(directed), weighted_(weighted), list_(vertices_count) {}
+
 void AdjacencyList::readGraph(std::ifstream& file) {
     clearGraph();
 
@@ -37,10 +41,7 @@ void AdjacencyList::readGraph(std::ifstream& file) {
         while (std::getline(file, line)) {
             std::istringstream iss(line);
             while (iss >> to >> weight) {
-                list_[from_idx].push_back({to - 1, weight});
-                // if (!directed_) {
-                //     list_[to - 1].push_back({from_idx, weight});
-                // }
+                addEdge(from_idx + 1, to, weight);
                 ++edges_count_;
             }
             ++from_idx;
@@ -52,10 +53,7 @@ void AdjacencyList::readGraph(std::ifstream& file) {
         while (std::getline(file, line)) {
             std::istringstream iss(line);
             while (iss >> to) {
-                list_[from_idx].push_back({to - 1, 1});
-                // if (!directed_) {
-                //     list_[to - 1].push_back({from_idx, 1});
-                // }
+                addEdge(from_idx + 1, to);
                 ++edges_count_;
             }
             ++from_idx;
@@ -64,7 +62,7 @@ void AdjacencyList::readGraph(std::ifstream& file) {
 }
 
 void AdjacencyList::writeGraph(std::ofstream& file) {
-    std::map<std::pair<int, int>, bool> used;
+    std::map<std::pair<int, int>, bool> used_edges;
 
     file << list_.size() << '\n';
     file << directed_ << ' ' << weighted_ << '\n';
@@ -72,7 +70,8 @@ void AdjacencyList::writeGraph(std::ofstream& file) {
     if (weighted_) {
         for (int i = 0; i < list_.size(); ++i) {
             for (const auto& edge : list_[i]) {
-                if (!used[{i, edge.first}] && !used[{edge.first, i}]) {
+                if (!used_edges[{i, edge.first}] &&
+                    !used_edges[{edge.first, i}]) {
                     file << edge.first + 1 << ' ' << edge.second << ' ';
                     // used[{i, edge.first}] = true;
                     // used[{edge.first, i}] = true;
@@ -84,7 +83,8 @@ void AdjacencyList::writeGraph(std::ofstream& file) {
     } else {
         for (int i = 0; i < list_.size(); ++i) {
             for (const auto& edge : list_[i]) {
-                if (!used[{i, edge.first}] && !used[{edge.first, i}]) {
+                if (!used_edges[{i, edge.first}] &&
+                    !used_edges[{edge.first, i}]) {
                     file << edge.first + 1 << ' ';
                     // used[{i, edge.first}] = true;
                     // used[{edge.first, i}] = true;
@@ -97,17 +97,13 @@ void AdjacencyList::writeGraph(std::ofstream& file) {
 }
 
 void AdjacencyList::addEdge(const int from, const int to, const int weight) {
-    if (isEdgeExist(from, to)) {
-        return;
-    }
-
     int from_idx = from - 1;
     int to_idx = to - 1;
 
     list_[from_idx].push_back({to_idx, weight});
-    if (!directed_) {
-        list_[to_idx].push_back({from_idx, weight});
-    }
+    // if (!directed_) {
+    //     list_[to_idx].push_back({from_idx, weight});
+    // }
     ++edges_count_;
 }
 
@@ -119,11 +115,12 @@ void AdjacencyList::removeEdge(const int from, const int to) {
         list_[from_idx].begin(), list_[from_idx].end(),
         [to_idx](const auto& edge) { return edge.first == to_idx; }));
 
-    if (!directed_) {
-        list_[to_idx].erase(std::remove_if(
-            list_[to_idx].begin(), list_[to_idx].end(),
-            [from_idx](const auto& edge) { return edge.first == from_idx; }));
-    }
+    // if (!directed_) {
+    //     list_[to_idx].erase(std::remove_if(
+    //         list_[to_idx].begin(), list_[to_idx].end(),
+    //         [from_idx](const auto& edge) { return edge.first == from_idx;
+    //         }));
+    // }
     --edges_count_;
 }
 
@@ -138,29 +135,30 @@ void AdjacencyList::changeEdge(const int from, const int to, const int weight) {
         edge_iter->second = weight;
     }
 
-    if (!directed_) {
-        edge_iter = std::find_if(
-            list_[to_idx].begin(), list_[to_idx].end(),
-            [from_idx](const auto& edge) { return edge.first == from_idx; });
-        if (edge_iter != list_[to_idx].end()) {
-            edge_iter->second = weight;
-        }
-    }
+    // if (!directed_) {
+    //     edge_iter = std::find_if(
+    //         list_[to_idx].begin(), list_[to_idx].end(),
+    //         [from_idx](const auto& edge) { return edge.first == from_idx; });
+    //     if (edge_iter != list_[to_idx].end()) {
+    //         edge_iter->second = weight;
+    //     }
+    // }
 }
 
 void AdjacencyList::printGraph() const {
-    std::map<std::pair<int, int>, bool> used;
+    std::map<std::pair<int, int>, bool> used_edges;
 
     std::cout << "Adjacency list:\n";
     if (weighted_) {
         for (int i = 0; i < list_.size(); ++i) {
             std::cout << i + 1 << ": ";
             for (const auto& edge : list_[i]) {
-                if (!used[{i, edge.first}] && !used[{edge.first, i}]) {
+                if (!used_edges[{i, edge.first}] &&
+                    !used_edges[{edge.first, i}]) {
                     std::cout << edge.first + 1 << ' ' << "(w: " << edge.second
                               << ") ";
-                    used[{i, edge.first}] = true;
-                    used[{edge.first, i}] = true;
+                    // used_edges[{i, edge.first}] = true;
+                    // used_edges[{edge.first, i}] = true;
                 }
             }
             std::cout << '\n';
@@ -169,10 +167,11 @@ void AdjacencyList::printGraph() const {
         for (int i = 0; i < list_.size(); ++i) {
             std::cout << i + 1 << ": ";
             for (const auto& edge : list_[i]) {
-                if (!used[{i, edge.first}] && !used[{edge.first, i}]) {
+                if (!used_edges[{i, edge.first}] &&
+                    !used_edges[{edge.first, i}]) {
                     std::cout << edge.first + 1 << ' ';
-                    used[{i, edge.first}] = true;
-                    used[{edge.first, i}] = true;
+                    // used_edges[{i, edge.first}] = true;
+                    // used_edges[{edge.first, i}] = true;
                 }
             }
             std::cout << '\n';
@@ -182,54 +181,35 @@ void AdjacencyList::printGraph() const {
 
 void AdjacencyList::clearGraph() {
     list_.clear();
-    directed_ = weighted_ = false;
     edges_count_ = 0;
+    directed_ = weighted_ = false;
 }
 
-int AdjacencyList::getVerticesCount() {
-    return list_.size(); }
+int AdjacencyList::getVerticesCount() { return list_.size(); }
 
-int AdjacencyList::getEdgesCount() {
-    return edges_count_; }
+int AdjacencyList::getEdgesCount() { return edges_count_; }
+
+adj_list_t* AdjacencyList::getStructPointer() { return &list_; }
 
 AdjacencyMatrix* AdjacencyList::getNewAdjMatrix() {
-    std::vector<std::vector<int>> matrix(list_.size(),
-                                         std::vector<int>(list_.size(), 0));
-    for (int i = 0; i < list_.size(); ++i) {
+    const int vertices_count = getVerticesCount();
+    AdjacencyMatrix* adj_matrix =
+        new AdjacencyMatrix(directed_, weighted_, vertices_count);
+    for (int i = 0; i < vertices_count; ++i) {
         for (const auto& edge : list_[i]) {
-            matrix[i][edge.first] = edge.second;
+            adj_matrix->addEdge(i + 1, edge.first + 1, edge.second);
         }
     }
-    return new AdjacencyMatrix(std::move(matrix), directed_, weighted_);
+    return adj_matrix;
 }
 
 EdgeList* AdjacencyList::getNewListOfEdges() {
-    std::map<std::pair<int, int>, int> edges;
-    for (int i = 0; i < list_.size(); ++i) {
+    const int vertices_count = getVerticesCount();
+    EdgeList* edge_list = new EdgeList(directed_, weighted_, vertices_count);
+    for (int i = 0; i < vertices_count; ++i) {
         for (const auto& edge : list_[i]) {
-            edges[{i, edge.first}] = edge.second;
+            edge_list->addEdge(i + 1, edge.first + 1, edge.second);
         }
     }
-    return new EdgeList(std::move(edges), directed_, weighted_, list_.size());
-}
-
-std::vector<std::vector<std::pair<int, int>>>*
-AdjacencyList::getGraphPointer() {
-    return &list_;
-}
-
-bool AdjacencyList::isVerticeExist(const int vertice) const {
-    return vertice >= 0 && vertice < list_.size();
-}
-
-bool AdjacencyList::isEdgeExist(const int from, const int to) const {
-    if (!isVerticeExist(from) || !isVerticeExist(to)) {
-        return false;
-    }
-
-    int from_idx = from - 1;
-    int to_idx = to - 1;
-    return std::any_of(
-        list_[from_idx].begin(), list_[from_idx].end(),
-        [to_idx](const auto& edge) { return edge.first == to_idx; });
+    return edge_list;
 }

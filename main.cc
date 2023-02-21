@@ -4,9 +4,9 @@
 
 int main() {
     GraphTest test;
-    // test.runUnitTests("input_1e3_1e5.txt");
-    // test.runUnitTests("input_1e4_1e5.txt");
-    // test.runUnitTests("input_1e5_1e5.txt");
+    test.runUnitTests("1e3_1e5.in");
+    // test.runUnitTests("1e4_1e5.in");
+    // test.runUnitTests("1e5_1e5.in");
     test.runPrimTests();
     test.runKruscalTests();
     return 0;

@@ -21,13 +21,9 @@ class GraphTest {
         readWriteTest(testFileName);
         std::cout << std::setw(19) << "Passed!\n";
 
-        // std::cout << "Add, remove and edit edges from graph test... ";
-        // addRemoveEditEdgesTest(testFileName);
-        // std::cout << std::setw(10) << "Passed!\n";
-
         std::cout << "\tTransform test... ";
         transformTest(testFileName);
-        std::cout << std::setw(19) << "Passed!\n";
+        std::cout << std::setw(20) << "Passed!\n";
 
         std::cout << "All tests passed. You are excellent!\n\n";
     }
@@ -65,20 +61,20 @@ class GraphTest {
     }
 
    private:
-    const std::string rw_fname1 = "rw1.txt";
-    const std::string rw_fname2 = "rw2.txt";
+    const std::string rw_fname1 = "rw1.out";
+    const std::string rw_fname2 = "rw2.out";
 
-    const std::string tr_adj_list_fname1 = "tr_adj_list1.txt";
-    const std::string tr_adj_list_fname2 = "tr_adj_list2.txt";
-    const std::string tr_adj_matr_fname1 = "tr_ad_matr1.txt";
-    const std::string tr_adj_matr_fname2 = "tr_ad_matr2.txt";
-    const std::string tr_edge_list_fname1 = "tr_edge_list1.txt";
-    const std::string tr_edge_list_fname2 = "tr_edge_list2.txt";
+    const std::string tr_adj_list_fname1 = "tr_adj_list1.out";
+    const std::string tr_adj_list_fname2 = "tr_adj_list2.out";
+    const std::string tr_adj_matr_fname1 = "tr_ad_matr1.out";
+    const std::string tr_adj_matr_fname2 = "tr_ad_matr2.out";
+    const std::string tr_edge_list_fname1 = "tr_edge_list1.out";
+    const std::string tr_edge_list_fname2 = "tr_edge_list2.out";
 
     // {"input", "ans", "output"}
     const std::vector<std::vector<std::string>> st_tests = {
-        {"st_test1.txt", "st_ans1.txt", "st_output1.txt"},
-        {"input_1e5_1e5.txt", "", "st_output_1e5_1e5.txt"}};
+        {"st_test1.in", "st_test1.ans", "st_test1.out"},
+        {"1e5_1e5.in", "", "st_1e5_1e5.out"}};
 
     void readWriteTest(const std::string& testFileName) {
         Graph graph;
@@ -90,8 +86,6 @@ class GraphTest {
         graph.writeGraph(rw_fname2);
         assert(compareFiles(rw_fname1, rw_fname2));
     }
-
-    void addRemoveEditEdgesTest(const std::string& testFileName) {}
 
     void transformTest(const std::string& testFileName) {
         Graph graph;

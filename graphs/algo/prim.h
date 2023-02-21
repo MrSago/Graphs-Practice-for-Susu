@@ -7,8 +7,8 @@
 
 class Prim {
    public:
-    EdgeList* getSpaingTreeDenseGraph(AdjacencyMatrix* graph);
-    EdgeList* getSpaingTreeSparseGraph(AdjacencyList* graph);
+    EdgeList* getSpaingTreeDenseGraph(AdjacencyMatrix& graph);
+    EdgeList* getSpaingTreeSparseGraph(AdjacencyList& graph);
 };
 
 #endif  // PRIM_H

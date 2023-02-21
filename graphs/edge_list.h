@@ -12,16 +12,20 @@
 class AdjacencyMatrix;
 class AdjacencyList;
 
+// map: key - pair of vertices, value - weight
+using edge_list_t = std::map<std::pair<int, int>, int>;
+
 class EdgeList : public GraphRepresentation {
    public:
     EdgeList() = default;
-    EdgeList(const std::map<std::pair<int, int>, int>&& edges,
-             const bool directed, const bool weighted,
+    EdgeList(const bool directed, const bool weighted,
              const int vertices_count);
+    EdgeList(const edge_list_t&& edges, const bool directed,
+             const bool weighted, const int vertices_count);
 
     void readGraph(std::ifstream& file) override;
     void writeGraph(std::ofstream& file) override;
-    void addEdge(const int from, const int to, const int weight = 0) override;
+    void addEdge(const int from, const int to, const int weight = 1) override;
     void removeEdge(const int from, const int to) override;
     void changeEdge(const int from, const int to, const int weight) override;
 
@@ -30,20 +34,15 @@ class EdgeList : public GraphRepresentation {
     int getVerticesCount() override;
     int getEdgesCount() override;
 
+    edge_list_t* getStructPointer();
     AdjacencyMatrix* getNewAdjMatrix();
     AdjacencyList* getNewAdjList();
 
-    std::map<std::pair<int, int>, int>* getGraphPointer();
-
    private:
-    // map: key - pair of vertices, value - weight
-    std::map<std::pair<int, int>, int> edges_;
+    edge_list_t edges_;
     int vertices_count_ = 0;
     bool directed_ = false;
     bool weighted_ = false;
-
-    bool isVerticeExist(const int vertice) const;
-    bool isEdgeExist(const int from, const int to) const;
 };
 
 #endif  // EDGE_LIST_H
