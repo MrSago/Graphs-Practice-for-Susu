@@ -10,7 +10,7 @@
 
 EdgeList* Prim::getSpaingTreeDenseGraph(AdjacencyMatrix* adjMatrix) {
     auto matrix = adjMatrix->getGraphPointer();
-    std::map<std::pair<int, int>, int> tree;
+    std::map<std::pair<int, int>, int> result;
     std::vector<bool> used(matrix->size());
     std::vector<int> min_e(matrix->size(), INF);
     std::vector<int> sel_e(matrix->size(), -1);
@@ -31,8 +31,8 @@ EdgeList* Prim::getSpaingTreeDenseGraph(AdjacencyMatrix* adjMatrix) {
 
         used[v] = true;
         if (sel_e[v] != -1) {
-            tree[{v, sel_e[v]}] = min_e[v];
-            tree[{sel_e[v], v}] = min_e[v];
+            result[{v, sel_e[v]}] = min_e[v];
+            result[{sel_e[v], v}] = min_e[v];
         }
 
         for (int to = 0; to < matrix->size(); ++to) {
@@ -43,12 +43,12 @@ EdgeList* Prim::getSpaingTreeDenseGraph(AdjacencyMatrix* adjMatrix) {
         }
     }
 
-    return new EdgeList(std::move(tree), false, true, matrix->size());
+    return new EdgeList(std::move(result), false, true, matrix->size());
 }
 
 EdgeList* Prim::getSpaingTreeSparseGraph(AdjacencyList* adjList) {
     auto list = adjList->getGraphPointer();
-    std::map<std::pair<int, int>, int> tree;
+    std::map<std::pair<int, int>, int> result;
     std::vector<int> min_e(list->size(), INF);
     std::vector<int> sel_e(list->size(), -1);
 
@@ -65,8 +65,8 @@ EdgeList* Prim::getSpaingTreeSparseGraph(AdjacencyList* adjList) {
         q.erase(q.begin());
 
         if (sel_e[v] != -1) {
-            tree[{v, sel_e[v]}] = min_e[v];
-            tree[{sel_e[v], v}] = min_e[v];
+            result[{v, sel_e[v]}] = min_e[v];
+            result[{sel_e[v], v}] = min_e[v];
             min_e[v] = 0;
         }
 
@@ -82,5 +82,5 @@ EdgeList* Prim::getSpaingTreeSparseGraph(AdjacencyList* adjList) {
         }
     }
 
-    return new EdgeList(std::move(tree), false, true, list->size());
+    return new EdgeList(std::move(result), false, true, list->size());
 }
