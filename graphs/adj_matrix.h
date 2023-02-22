@@ -17,9 +17,8 @@ using adj_matrix_t = std::vector<std::vector<int>>;
 class AdjacencyMatrix : public GraphRepresentation {
    public:
     AdjacencyMatrix() = default;
-    AdjacencyMatrix(const std::vector<std::vector<int>>&& matrix,
-                    const bool directed, const bool weighted);
-    AdjacencyMatrix(const bool directed, const bool weighted, const int vertices_count);
+    AdjacencyMatrix(const int vertices_count, const bool directed,
+                    const bool weighted);
 
     void readGraph(std::ifstream& file) override;
     void writeGraph(std::ofstream& file) override;
@@ -38,9 +37,9 @@ class AdjacencyMatrix : public GraphRepresentation {
 
    private:
     adj_matrix_t matrix_;
-    int edges_count_ = 0;
-    bool directed_ = false;
-    bool weighted_ = false;
+    int edges_count_;
+    bool directed_;
+    bool weighted_;
 };
 
 #endif  // ADJ_MATRIX_H

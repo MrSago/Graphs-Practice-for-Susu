@@ -9,18 +9,11 @@
 #include "adj_matrix.h"
 #include "graph_representation.h"
 
-EdgeList::EdgeList(const edge_list_t&& edges, const bool directed,
-                   const bool weighted, const int vertices_count)
-    : edges_(edges),
+EdgeList::EdgeList(const int vertices_count, const bool directed,
+                   const bool weighted)
+    : vertices_count_(vertices_count),
       directed_(directed),
-      weighted_(weighted),
-      vertices_count_(vertices_count) {}
-
-EdgeList::EdgeList(const bool directed, const bool weighted,
-                   const int vertices_count)
-    : directed_(directed),
-      weighted_(weighted),
-      vertices_count_(vertices_count) {}
+      weighted_(weighted) {}
 
 void EdgeList::readGraph(std::ifstream& file) {
     clearGraph();

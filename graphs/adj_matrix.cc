@@ -9,15 +9,12 @@
 #include "edge_list.h"
 #include "graph_representation.h"
 
-AdjacencyMatrix::AdjacencyMatrix(const adj_matrix_t&& matrix,
-                                 const bool directed, const bool weighted)
-    : matrix_(matrix), directed_(directed), weighted_(weighted) {}
-
-AdjacencyMatrix::AdjacencyMatrix(const bool directed, const bool weighted,
-                                 const int vertices_count)
-    : directed_(directed),
-      weighted_(weighted),
-      matrix_(vertices_count, std::vector<int>(vertices_count, 0)) {}
+AdjacencyMatrix::AdjacencyMatrix(const int vertices_count, const bool directed,
+                                 const bool weighted)
+    : matrix_(vertices_count, std::vector<int>(vertices_count, 0)),
+      edges_count_(0),
+      directed_(directed),
+      weighted_(weighted) {}
 
 void AdjacencyMatrix::readGraph(std::ifstream& file) {
     clearGraph();

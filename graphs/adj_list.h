@@ -18,9 +18,8 @@ using adj_list_t = std::vector<std::vector<std::pair<int, int>>>;
 class AdjacencyList : public GraphRepresentation {
    public:
     AdjacencyList() = default;
-    AdjacencyList(const std::vector<std::vector<std::pair<int, int>>>&& list,
-                  const bool directed, const bool weighted);
-    AdjacencyList(const bool directed, const bool weighted, const int vertices_count);
+    AdjacencyList(const int vertices_count, const bool directed,
+                  const bool weighted);
 
     void readGraph(std::ifstream& file) override;
     void writeGraph(std::ofstream& file) override;
@@ -39,9 +38,9 @@ class AdjacencyList : public GraphRepresentation {
 
    private:
     adj_list_t list_;
-    int edges_count_ = 0;
-    bool directed_ = false;
-    bool weighted_ = false;
+    int edges_count_;
+    bool directed_;
+    bool weighted_;
 };
 
 #endif  // ADJ_LIST_H

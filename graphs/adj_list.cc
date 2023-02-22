@@ -14,14 +14,12 @@
 #include "edge_list.h"
 #include "graph_representation.h"
 
-AdjacencyList::AdjacencyList(
-    const std::vector<std::vector<std::pair<int, int>>>&& list,
-    const bool directed, const bool weighted)
-    : list_(list), directed_(directed), weighted_(weighted) {}
-
-AdjacencyList::AdjacencyList(const bool directed, const bool weighted,
-                             const int vertices_count)
-    : directed_(directed), weighted_(weighted), list_(vertices_count) {}
+AdjacencyList::AdjacencyList(const int vertices_count, const bool directed,
+                             const bool weighted)
+    : list_(vertices_count),
+      edges_count_(0),
+      directed_(directed),
+      weighted_(weighted) {}
 
 void AdjacencyList::readGraph(std::ifstream& file) {
     clearGraph();
@@ -63,12 +61,13 @@ void AdjacencyList::readGraph(std::ifstream& file) {
 
 void AdjacencyList::writeGraph(std::ofstream& file) {
     std::map<std::pair<int, int>, bool> used_edges;
+    const int vertices_count = getVerticesCount();
 
-    file << list_.size() << '\n';
+    file << vertices_count << '\n';
     file << directed_ << ' ' << weighted_ << '\n';
 
     if (weighted_) {
-        for (int i = 0; i < list_.size(); ++i) {
+        for (int i = 0; i < vertices_count; ++i) {
             for (const auto& edge : list_[i]) {
                 if (!used_edges[{i, edge.first}] &&
                     !used_edges[{edge.first, i}]) {
@@ -81,7 +80,7 @@ void AdjacencyList::writeGraph(std::ofstream& file) {
             file << '\n';
         }
     } else {
-        for (int i = 0; i < list_.size(); ++i) {
+        for (int i = 0; i < vertices_count; ++i) {
             for (const auto& edge : list_[i]) {
                 if (!used_edges[{i, edge.first}] &&
                     !used_edges[{edge.first, i}]) {
@@ -147,10 +146,11 @@ void AdjacencyList::changeEdge(const int from, const int to, const int weight) {
 
 void AdjacencyList::printGraph() const {
     std::map<std::pair<int, int>, bool> used_edges;
+    const int vertices_count = list_.size();
 
     std::cout << "Adjacency list:\n";
     if (weighted_) {
-        for (int i = 0; i < list_.size(); ++i) {
+        for (int i = 0; i < vertices_count; ++i) {
             std::cout << i + 1 << ": ";
             for (const auto& edge : list_[i]) {
                 if (!used_edges[{i, edge.first}] &&
@@ -164,7 +164,7 @@ void AdjacencyList::printGraph() const {
             std::cout << '\n';
         }
     } else {
-        for (int i = 0; i < list_.size(); ++i) {
+        for (int i = 0; i < vertices_count; ++i) {
             std::cout << i + 1 << ": ";
             for (const auto& edge : list_[i]) {
                 if (!used_edges[{i, edge.first}] &&

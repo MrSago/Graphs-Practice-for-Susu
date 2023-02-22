@@ -21,7 +21,7 @@ EdgeList* Kruscal::getSpaingTree(EdgeList& graph) {
     });
     std::sort(copied_graph.begin(), copied_graph.end());
 
-    EdgeList* result = new EdgeList(false, true, vertices_count);
+    EdgeList* result = new EdgeList(vertices_count, false, true);
     DSU dsu(vertices_count);
 
     for (int i = 0; i < edges_count; ++i) {

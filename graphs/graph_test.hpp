@@ -13,16 +13,16 @@
 
 class GraphTest {
    public:
-    void runUnitTests(const std::string& testFileName) {
+    void runUnitTests(const std::string& test_filename) {
         std::cout << "\nGraph Unit Tests started...\n";
-        std::cout << "Input test file: " << testFileName << '\n';
+        std::cout << "Input test file: " << test_filename << '\n';
 
         std::cout << "\tRead-write test... ";
-        readWriteTest(testFileName);
+        readWriteTest(test_filename);
         std::cout << std::setw(19) << "Passed!\n";
 
         std::cout << "\tTransform test... ";
-        transformTest(testFileName);
+        transformTest(test_filename);
         std::cout << std::setw(20) << "Passed!\n";
 
         std::cout << "All tests passed. You are excellent!\n\n";
@@ -76,20 +76,20 @@ class GraphTest {
         {"st_test1.in", "st_test1.ans", "st_test1.out"},
         {"1e5_1e5.in", "", "st_1e5_1e5.out"}};
 
-    void readWriteTest(const std::string& testFileName) {
+    void readWriteTest(const std::string& test_filename) {
         Graph graph;
-        graph.readGraph(testFileName);
+        graph.readGraph(test_filename);
         graph.writeGraph(rw_fname1);
-        assert(compareFileSize(testFileName, rw_fname1));
+        assert(compareFileSize(test_filename, rw_fname1));
 
         graph.readGraph(rw_fname1);
         graph.writeGraph(rw_fname2);
         assert(compareFiles(rw_fname1, rw_fname2));
     }
 
-    void transformTest(const std::string& testFileName) {
+    void transformTest(const std::string& test_filename) {
         Graph graph;
-        graph.readGraph(testFileName);
+        graph.readGraph(test_filename);
         graph.transformToAdjList();
         graph.writeGraph(tr_adj_list_fname1);
         graph.readGraph(tr_adj_list_fname1);
@@ -132,11 +132,11 @@ class GraphTest {
         std::ifstream f2(p2, std::ifstream::binary | std::ifstream::ate);
 
         if (f1.fail() || !f1.is_open() || f2.fail() || !f2.is_open()) {
-            return false;  // file problem
+            return false;
         }
 
         if (f1.tellg() != f2.tellg()) {
-            return false;  // size mismatch
+            return false;
         }
         return true;
     }
@@ -146,14 +146,13 @@ class GraphTest {
         std::ifstream f2(p2, std::ifstream::binary | std::ifstream::ate);
 
         if (f1.fail() || !f1.is_open() || f2.fail() || !f2.is_open()) {
-            return false;  // file problem
+            return false;
         }
 
         if (f1.tellg() != f2.tellg()) {
-            return false;  // size mismatch
+            return false;
         }
 
-        // seek back to beginning and use std::equal to compare contents
         f1.seekg(0, std::ifstream::beg);
         f2.seekg(0, std::ifstream::beg);
         return std::equal(std::istreambuf_iterator<char>(f1.rdbuf()),
@@ -162,4 +161,4 @@ class GraphTest {
     }
 };
 
-#endif // GRAPH_TEST_HPP
+#endif  // GRAPH_TEST_HPP

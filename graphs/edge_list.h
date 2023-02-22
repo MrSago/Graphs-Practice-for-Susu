@@ -18,10 +18,8 @@ using edge_list_t = std::map<std::pair<int, int>, int>;
 class EdgeList : public GraphRepresentation {
    public:
     EdgeList() = default;
-    EdgeList(const bool directed, const bool weighted,
-             const int vertices_count);
-    EdgeList(const edge_list_t&& edges, const bool directed,
-             const bool weighted, const int vertices_count);
+    EdgeList(const int vertices_count, const bool directed,
+             const bool weighted);
 
     void readGraph(std::ifstream& file) override;
     void writeGraph(std::ofstream& file) override;
@@ -40,9 +38,9 @@ class EdgeList : public GraphRepresentation {
 
    private:
     edge_list_t edges_;
-    int vertices_count_ = 0;
-    bool directed_ = false;
-    bool weighted_ = false;
+    int vertices_count_;
+    bool directed_;
+    bool weighted_;
 };
 
 #endif  // EDGE_LIST_H
