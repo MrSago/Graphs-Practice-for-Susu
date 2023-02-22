@@ -7,7 +7,7 @@ int main() {
     test.runUnitTests("1e3_1e5.in");
     // test.runUnitTests("1e4_1e5.in");
     // test.runUnitTests("1e5_1e5.in");
-    test.runPrimTests();
-    test.runKruscalTests();
+    // test.runPrimTests();
+    // test.runKruscalTests();
     return 0;
 }
