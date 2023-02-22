@@ -139,7 +139,7 @@ edge_list_t* EdgeList::getStructPointer() { return &edges_; }
 
 AdjacencyMatrix* EdgeList::getNewAdjMatrix() {
     AdjacencyMatrix* adj_matrix =
-        new AdjacencyMatrix(directed_, weighted_, vertices_count_);
+        new AdjacencyMatrix(vertices_count_, directed_, weighted_);
     for (const auto& [edge, weight] : edges_) {
         adj_matrix->addEdge(edge.first + 1, edge.second + 1, weight);
     }
@@ -148,7 +148,7 @@ AdjacencyMatrix* EdgeList::getNewAdjMatrix() {
 
 AdjacencyList* EdgeList::getNewAdjList() {
     AdjacencyList* adj_list =
-        new AdjacencyList(directed_, weighted_, vertices_count_);
+        new AdjacencyList(vertices_count_, directed_, weighted_);
     for (const auto& [edge, weight] : edges_) {
         adj_list->addEdge(edge.first + 1, edge.second + 1, weight);
     }

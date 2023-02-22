@@ -194,7 +194,7 @@ adj_list_t* AdjacencyList::getStructPointer() { return &list_; }
 AdjacencyMatrix* AdjacencyList::getNewAdjMatrix() {
     const int vertices_count = getVerticesCount();
     AdjacencyMatrix* adj_matrix =
-        new AdjacencyMatrix(directed_, weighted_, vertices_count);
+        new AdjacencyMatrix(vertices_count, directed_, weighted_);
     for (int i = 0; i < vertices_count; ++i) {
         for (const auto& edge : list_[i]) {
             adj_matrix->addEdge(i + 1, edge.first + 1, edge.second);
@@ -205,7 +205,7 @@ AdjacencyMatrix* AdjacencyList::getNewAdjMatrix() {
 
 EdgeList* AdjacencyList::getNewListOfEdges() {
     const int vertices_count = getVerticesCount();
-    EdgeList* edge_list = new EdgeList(directed_, weighted_, vertices_count);
+    EdgeList* edge_list = new EdgeList(vertices_count, directed_, weighted_);
     for (int i = 0; i < vertices_count; ++i) {
         for (const auto& edge : list_[i]) {
             edge_list->addEdge(i + 1, edge.first + 1, edge.second);
