@@ -29,7 +29,7 @@ EdgeList* Kruscal::getSpaingTree(EdgeList& graph) {
         int y = copied_graph[i].second.second;
         int w = copied_graph[i].first;
         if (dsu.find(x) != dsu.find(y)) {
-            result->addEdge(x, y, w);
+            result->addEdge(x + 1, y + 1, w);
             dsu.unite(x, y);
         }
     }

@@ -34,7 +34,7 @@ EdgeList* Prim::getSpaingTreeDenseGraph(AdjacencyMatrix& graph) {
 
         used_vertices[v] = true;
         if (selected_edges[v] != -1) {
-            result->addEdge(v, selected_edges[v], min_edges[v]);
+            result->addEdge(v + 1, selected_edges[v] + 1, min_edges[v]);
         }
 
         for (int to = 0; to < vertices_count; ++to) {
@@ -68,7 +68,7 @@ EdgeList* Prim::getSpaingTreeSparseGraph(AdjacencyList& graph) {
         q.erase(q.begin());
 
         if (selected_edges[v] != -1) {
-            result->addEdge(v, selected_edges[v], min_edges[v]);
+            result->addEdge(v + 1, selected_edges[v] + 1, min_edges[v]);
             min_edges[v] = 0;
         }
 
