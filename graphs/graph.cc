@@ -198,7 +198,6 @@ AdjacencyList* Graph::convertToNewAdjList() {
         default:
             return nullptr;
     }
-    return nullptr;
 }
 
 EdgeList* Graph::convertToNewEdgeList() {
@@ -216,5 +215,4 @@ EdgeList* Graph::convertToNewEdgeList() {
         default:
             return nullptr;
     }
-    return nullptr;
 }
