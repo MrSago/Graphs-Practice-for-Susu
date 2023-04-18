@@ -11,6 +11,8 @@
 #include "kruscal.h"
 #include "prim.h"
 
+Graph::Graph() = default;
+
 Graph::Graph(GraphRepresentation* graph, GraphType graph_type)
     : graph_repr_(graph), graph_type_(graph_type) {}
 
@@ -97,28 +99,42 @@ void Graph::transformToListOfEdges() {
     graph_type_ = GraphType::EdgeList;
 }
 
+Graph Graph::getSpaingTreeBoruvka() {
+    EdgeList* edge_list = convertToNewEdgeList();
+    if (edge_list) {
+        EdgeList* result = boruvki_.getSpaingTree(*edge_list);
+        edge_list->clearGraph();
+        delete edge_list;
+        return Graph(result, GraphType::EdgeList);
+    }
+
+    EdgeList* result =
+        boruvki_.getSpaingTree((*static_cast<EdgeList*>(graph_repr_)));
+    return Graph(result, GraphType::EdgeList);
+}
+
 Graph Graph::getSpaingTreePrim() {
     if (graph_repr_->getEdgesCount() == graph_repr_->getVerticesCount()) {
         AdjacencyMatrix* adj_matrix = convertToNewAdjMatrix();
         if (adj_matrix) {
-            EdgeList* result = prim.getSpaingTreeDenseGraph(*adj_matrix);
+            EdgeList* result = prim_.getSpaingTreeDenseGraph(*adj_matrix);
             adj_matrix->clearGraph();
             delete adj_matrix;
             return Graph(result, GraphType::EdgeList);
         }
-        EdgeList* result = prim.getSpaingTreeDenseGraph(
+        EdgeList* result = prim_.getSpaingTreeDenseGraph(
             *(static_cast<AdjacencyMatrix*>(graph_repr_)));
         return Graph(result, GraphType::EdgeList);
     }
 
     AdjacencyList* adj_list = convertToNewAdjList();
     if (adj_list) {
-        EdgeList* result = prim.getSpaingTreeSparseGraph(*adj_list);
+        EdgeList* result = prim_.getSpaingTreeSparseGraph(*adj_list);
         adj_list->clearGraph();
         delete adj_list;
         return Graph(result, GraphType::EdgeList);
     }
-    EdgeList* result = prim.getSpaingTreeSparseGraph(
+    EdgeList* result = prim_.getSpaingTreeSparseGraph(
         (*static_cast<AdjacencyList*>(graph_repr_)));
     return Graph(result, GraphType::EdgeList);
 }
@@ -126,13 +142,13 @@ Graph Graph::getSpaingTreePrim() {
 Graph Graph::getSpaingTreeKruscal() {
     EdgeList* edge_list = convertToNewEdgeList();
     if (edge_list) {
-        EdgeList* result = kruscal.getSpaingTree(*edge_list);
+        EdgeList* result = kruscal_.getSpaingTree(*edge_list);
         edge_list->clearGraph();
         delete edge_list;
         return Graph(result, GraphType::EdgeList);
     }
     EdgeList* result =
-        kruscal.getSpaingTree((*static_cast<EdgeList*>(graph_repr_)));
+        kruscal_.getSpaingTree((*static_cast<EdgeList*>(graph_repr_)));
     return Graph(result, GraphType::EdgeList);
 }
 

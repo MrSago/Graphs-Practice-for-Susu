@@ -4,6 +4,7 @@
 
 #include "adj_list.h"
 #include "adj_matrix.h"
+#include "boruvki.h"
 #include "edge_list.h"
 #include "graph_representation.h"
 #include "kruscal.h"
@@ -18,7 +19,7 @@ enum class GraphType : char {
 
 class Graph {
    public:
-    Graph() = default;
+    Graph();
     Graph(GraphRepresentation* graph, GraphType graph_type);
     ~Graph();
 
@@ -35,20 +36,22 @@ class Graph {
     void transformToAdjList();
     void transformToListOfEdges();
 
+    Graph getSpaingTreeBoruvka();
     Graph getSpaingTreePrim();
     Graph getSpaingTreeKruscal();
 
    private:
-    GraphRepresentation* graph_repr_;
-    GraphType graph_type_ = GraphType::Unknown;
-
-    Prim prim;
-    Kruscal kruscal;
-
     GraphRepresentation* allocNewGraph();
     AdjacencyMatrix* convertToNewAdjMatrix();
     AdjacencyList* convertToNewAdjList();
     EdgeList* convertToNewEdgeList();
+
+    GraphRepresentation* graph_repr_;
+    GraphType graph_type_ = GraphType::Unknown;
+
+    Boruvki boruvki_;
+    Prim prim_;
+    Kruscal kruscal_;
 };
 
 #endif  // GRAPH_H

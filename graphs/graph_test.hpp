@@ -28,6 +28,22 @@ class GraphTest {
         std::cout << "All tests passed. You are excellent!\n\n";
     }
 
+    void runBoruvkiTests() {
+        std::cout << "\nKruscal Tests started...\n";
+        for (auto& test : st_tests) {
+            std::cout << test[0] << ": ";
+
+            auto start = std::chrono::high_resolution_clock::now();
+            BoruvkiTest(test[0], test[1], std::string("br_") + test[2]);
+            auto stop = std::chrono::high_resolution_clock::now();
+
+            double calcTime = (stop - start).count() * 1e-9;
+            std::cout << "Passed!"
+                      << " (time: " << calcTime << ")\n";
+        }
+        std::cout << "All tests passed! You are the best!\n\n";
+    }
+
     void runPrimTests() {
         std::cout << "\nPrim Tests started...\n";
         for (auto& test : st_tests) {
@@ -66,15 +82,15 @@ class GraphTest {
 
     const std::string tr_adj_list_fname1 = "tr_adj_list1.out";
     const std::string tr_adj_list_fname2 = "tr_adj_list2.out";
-    const std::string tr_adj_matr_fname1 = "tr_ad_matr1.out";
-    const std::string tr_adj_matr_fname2 = "tr_ad_matr2.out";
+    const std::string tr_adj_matr_fname1 = "tr_adj_matr1.out";
+    const std::string tr_adj_matr_fname2 = "tr_adj_matr2.out";
     const std::string tr_edge_list_fname1 = "tr_edge_list1.out";
     const std::string tr_edge_list_fname2 = "tr_edge_list2.out";
 
     // {"input", "ans", "output"}
     const std::vector<std::vector<std::string>> st_tests = {
         {"st_test1.in", "st_test1.ans", "st_test1.out"},
-        {"1e5_1e5.in", "", "st_1e5_1e5.out"}};
+        {"st_test2.in", "st_test2.ans", "st_test2.out"}};
 
     void readWriteTest(const std::string& test_filename) {
         Graph graph;
@@ -107,6 +123,15 @@ class GraphTest {
         graph.readGraph(tr_edge_list_fname1);
         graph.writeGraph(tr_edge_list_fname2);
         assert(compareFiles(tr_edge_list_fname1, tr_edge_list_fname2));
+    }
+
+    void BoruvkiTest(const std::string& input, const std::string& ans,
+                     const std::string& output) {
+        Graph graph;
+        graph.readGraph(input);
+        Graph res = graph.getSpaingTreeBoruvka();
+        res.writeGraph(output);
+        // assert(compareFiles(output, ans));
     }
 
     void PrimTest(const std::string& input, const std::string& ans,

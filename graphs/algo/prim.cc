@@ -13,6 +13,7 @@ constexpr int kInf = int(1e9);
 EdgeList* Prim::getSpaingTreeDenseGraph(AdjacencyMatrix& graph) {
     const adj_matrix_t& matrix = (*graph.getStructPointer());
     const int vertices_count = graph.getVerticesCount();
+
     EdgeList* result = new EdgeList(vertices_count, false, true);
     std::vector<bool> used_vertices(vertices_count, false);
     std::vector<int> min_edges(vertices_count, kInf);
@@ -51,6 +52,7 @@ EdgeList* Prim::getSpaingTreeDenseGraph(AdjacencyMatrix& graph) {
 EdgeList* Prim::getSpaingTreeSparseGraph(AdjacencyList& graph) {
     const adj_list_t& list = (*graph.getStructPointer());
     const int vertices_count = graph.getVerticesCount();
+
     EdgeList* result = new EdgeList(vertices_count, false, true);
     std::vector<int> min_edges(vertices_count, kInf);
     std::vector<int> selected_edges(vertices_count, -1);
