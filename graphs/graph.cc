@@ -113,7 +113,7 @@ Graph Graph::getSpaingTreeBoruvka() {
     return Graph(result, GraphType::EdgeList);
 }
 
-Graph Graph::getSpaingTreePrim() {
+Graph Graph::getSpaingTreePrima() {
     if (graph_repr_->getEdgesCount() == graph_repr_->getVerticesCount()) {
         AdjacencyMatrix* adj_matrix = convertToNewAdjMatrix();
         if (adj_matrix) {

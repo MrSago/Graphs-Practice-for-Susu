@@ -138,7 +138,7 @@ class GraphTest {
                   const std::string& output) {
         Graph graph;
         graph.readGraph(input);
-        Graph res = graph.getSpaingTreePrim();
+        Graph res = graph.getSpaingTreePrima();
         res.writeGraph(output);
         // assert(compareFiles(output, ans));
     }

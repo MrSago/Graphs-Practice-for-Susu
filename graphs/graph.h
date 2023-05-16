@@ -37,7 +37,7 @@ class Graph {
     void transformToListOfEdges();
 
     Graph getSpaingTreeBoruvka();
-    Graph getSpaingTreePrim();
+    Graph getSpaingTreePrima();
     Graph getSpaingTreeKruscal();
 
    private:
