@@ -3,19 +3,29 @@
 #include "graph_test.hpp"
 
 int main() {
-    GraphTest test;
-    // test.runUnitTests("1e3_1e5.in");
-    // test.runUnitTests("1e4_1e5.in");
-    // test.runUnitTests("1e5_1e5.in");
-    test.runBoruvkiTests();
-    test.runPrimTests();
-    test.runKruscalTests();
+  // freopen("et1.out", "w", stdout);
 
-    // Graph g;
-    // g.readGraph("1.txt");
-    // g.printGraph();
-    // Graph gg = g.getSpaingTreeKruscal();
-    // gg.printGraph();
+  // Graph graph;
+  // graph.readGraph("et1.in");
 
-    return 0;
+  // bool circleExist = false;
+  // int v = graph.checkEuler(circleExist);
+
+  // if (v == 0) {
+  //   std::cout << "0\n";
+  //   exit(0);
+  // } else {
+  //   //  std::vector<int> path = graph.getEuleranTourEffective();
+  //   std::vector<int> path = graph.getEuleranTourFleri();
+
+  //   std::cout << path[0] << "\n";
+  //   for (int i = 0; i < path.size(); ++i) {
+  //     std::cout << path[i] << ((i + 1 < path.size()) ? " " : "\n");
+  //   }
+  // }
+
+  GraphTest test;
+  test.runEuleranTourTest();
+
+  return 0;
 }
